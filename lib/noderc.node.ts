@@ -29,6 +29,14 @@ interface noderc {
    */
   isFile(path: string): boolean;
 
+  /**
+   * Returns ```true``` if the given ```path``` names a directory, ```false```
+   * otherwise.
+   * @param path
+   * @returns boolean
+   */
+  isDirectory(path: string): boolean;
+
 }
 const noderc: noderc = require('../build/lib/noderc.node');
 export = noderc;
