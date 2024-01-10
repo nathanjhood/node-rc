@@ -13,7 +13,6 @@
 #if __has_include(<napi.h>) && BUILDING_NODE_EXTENSION
 
 #include "noderc/version.hpp"
-// #include "base64/base64.hpp"
 
 #include <napi.h>
 
@@ -52,10 +51,10 @@ Napi::Object Init(Napi::Env env, Napi::Object exports)
 }
 
 // Register a new addon with the intializer function defined above
-NODE_API_MODULE(base64, Init) // (name to use, initializer to use)
+NODE_API_MODULE(noderc, Init) // (name to use, initializer to use)
 
 // The above attaches the functions exported in 'Init()' to the name used in the fist argument.
-// The C++ functions are then obtainable on the Javascript side under e.g. 'base64.hello()'
+// The C++ functions are then obtainable on the Javascript side under e.g. 'noderc.hello()'
 
 } // namespace addon
 
