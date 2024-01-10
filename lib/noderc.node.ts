@@ -12,6 +12,11 @@ interface noderc {
    * @returns string
    */
   version(): string;
+
+  /**
+   * @returns string
+   */
+  open(file: string): string;
 }
 const noderc: noderc = require('../build/lib/noderc.node');
 export = noderc;
