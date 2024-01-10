@@ -14,9 +14,21 @@ interface noderc {
   version(): string;
 
   /**
+   * Opens and returns a non-directory file object at ```path```, or throws
+   * ```std::system_error()``` on error.
+   * @param path
    * @returns string
    */
-  open(file: string): string;
+  open(path: string): string;
+
+  /**
+   * Returns ```true``` if the given ```path``` names a regular file, ```false```
+   * otherwise.
+   * @param path
+   * @returns boolean
+   */
+  isFile(path: string): boolean;
+
 }
 const noderc: noderc = require('../build/lib/noderc.node');
 export = noderc;

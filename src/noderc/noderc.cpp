@@ -91,6 +91,29 @@ Napi::Value Open(const Napi::CallbackInfo& args)
   return out;
 }
 
+Napi::Value IsFile(const Napi::CallbackInfo& args) {
+
+  Napi::Env env = args.Env();
+
+  // Arguments required: one only
+  if (args.Length() != 1)
+  {
+    Napi::TypeError::New(env, "Wrong number of arguments").ThrowAsJavaScriptException();
+    return env.Null();
+  }
+
+  // Param 1 must be a string
+  if (!args[0].IsString())
+  {
+    Napi::TypeError::New(env, "Wrong argument type!").ThrowAsJavaScriptException();
+    return env.Null();
+  }
+
+  auto fs = cmrc::noderc::resources::get_filesystem();
+
+  return Napi::Boolean::New(env, fs.is_file(args[0].ToString().Utf8Value()));
+}
+
 // Construct an 'initializer' object that carries our functions
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
 
@@ -108,6 +131,11 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set(
     Napi::String::New(env, "open"),
     Napi::Function::New(env, Open)
+  );
+
+  exports.Set(
+    Napi::String::New(env, "isFile"),
+    Napi::Function::New(env, IsFile)
   );
 
   // The above will expose the C++ function 'Hello' as a javascript function named 'hello', etc...

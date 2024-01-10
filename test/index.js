@@ -1,5 +1,3 @@
 const noderc = require("../lib/noderc.node");
-
-console.log(noderc.hello());
-console.log(noderc.version());
-console.log(noderc.open("tst.txt"))
+console.log(noderc.isFile("tst.txt"));
+console.log(noderc.isFile("sts.xtx"));

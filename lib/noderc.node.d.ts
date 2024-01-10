@@ -1,7 +1,8 @@
 declare interface noderc {
   hello(): string;
   version(): string;
-  open(file: string): string;
+  open(path: string): string;
+  isFile(path: string): boolean;
 }
 declare const noderc: noderc;
 export = noderc;
