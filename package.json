@@ -1,0 +1,34 @@
+{
+  "name": "@nathanjhood/node-rc",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/nathanjhood/node-rc.git",
+  "author": "StoneyDSP <nathanjhood@googlemail.com>",
+  "license": "MIT",
+  "scripts": {
+    "preinstall": "cmake-js install",
+    "postinstall": "cmake-js compile",
+    "configure": "cmake-js configure",
+    "reconfigure": "cmake-js reconfigure",
+    "build": "cmake-js build",
+    "build:ts": "tsc",
+    "rebuild": "cmake-js rebuild",
+    "clean": "cmake-js clean",
+    "wipe": "cmake-js clean && rm -rvf ./node_modules",
+    "start": "node index.js"
+  },
+
+  "dependencies": {
+    "clang-format": "^1.8.0",
+    "cmake-js": "^7.2.1",
+    "node-addon-api": "^7.0.0",
+    "node-api-headers": "^1.1.0"
+  },
+
+  "devDependencies": {
+    "@types/node": "^20.10.6",
+    "ts-add-js-extension": "^1.6.0",
+    "tsc-alias": "^1.8.8",
+    "typescript": "^5.3.3"
+  }
+}
