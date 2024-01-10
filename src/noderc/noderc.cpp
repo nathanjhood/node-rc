@@ -9,4 +9,26 @@
  *
  */
 
+#include "noderc/version.hpp"
 #include "noderc/noderc.hpp"
+
+#include <cmrc/cmrc.hpp>
+
+CMRC_DECLARE(noderc::resources);
+
+namespace noderc
+{
+namespace resources
+{
+
+/**
+ * @brief Get the ```cmrc::embedded_filesystem``` object.
+ *
+ * @return ```cmrc::embedded_filesystem```
+ */
+cmrc::embedded_filesystem get_filesystem() {
+  return cmrc::noderc::resources::get_filesystem();
+}
+
+} // namespace resources
+} // namespace noderc

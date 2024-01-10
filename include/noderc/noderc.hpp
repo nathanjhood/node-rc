@@ -12,6 +12,37 @@
 #ifndef NODERC_H_
 #define NODERC_H_
 
-#include "noderc/version.hpp"
+/**
+ * @brief The ```noderc``` namespace.
+ *
+ */
+namespace noderc
+{
+
+/**
+ * @brief The ```noderc::noderc``` namespace.
+ *
+ */
+namespace noderc
+{
+} // namespace noderc::noderc
+
+/**
+ * @brief The ```noderc::resources``` namespace.
+ *
+ */
+namespace resources
+{
+} // namespace noderc::resources
+
+/**
+ * @brief The ```noderc::addon``` namespace.
+ *
+ */
+namespace addon
+{
+} // namespace noderc::addon
+
+} // namespace noderc
 
 #endif // NODERC_H_
