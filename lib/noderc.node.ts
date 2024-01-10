@@ -37,6 +37,13 @@ interface noderc {
    */
   isDirectory(path: string): boolean;
 
+  /**
+   * Returns ```true``` if the given ```path``` names an existing file or
+   * directory, ```false``` otherwise.
+   * @param path
+   * @returns boolean
+   */
+  exists(path: string): boolean;
 }
 const noderc: noderc = require('../build/lib/noderc.node');
 export = noderc;
