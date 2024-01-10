@@ -15,7 +15,7 @@ include (WriteVersionFile)
 write_version_file ()
 include (WriteVersionHeader)
 write_version_header ()
-configure_file ("include/${PROJECT_NAME}/version.h" "include/${PROJECT_NAME}/version.h")
+configure_file ("include/${PROJECT_NAME}/version.hpp" "include/${PROJECT_NAME}/version.hpp")
 
 #[===========================================================================[
   Export this configuration to share it with other CMake projects

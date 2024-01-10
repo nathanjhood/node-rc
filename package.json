@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/nathanjhood/node-rc.git",
-  "author": "StoneyDSP <nathanjhood@googlemail.com>",
+  "author": "Nathan J. Hood <nathanjhood@googlemail.com>",
   "license": "MIT",
   "scripts": {
     "preinstall": "cmake-js install",
