@@ -1,5 +1,5 @@
 /**
- * @file noderc.hpp
+ * @file noderc.cpp
  * @author Nathan J. Hood (nathanjhood@googlemail.com)
  * @brief
  * @version 1.0.0
@@ -9,9 +9,4 @@
  *
  */
 
-#ifndef NODERC_H_
-#define NODERC_H_
-
-#include "noderc/version.hpp"
-
-#endif // NODERC_H_
+#include "noderc/noderc.hpp"
