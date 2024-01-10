@@ -193,3 +193,6 @@ notes.txt
 !icon__32x32.png
 foo.txt
 bar.txt
+
+package.lock
+yarn.lock
