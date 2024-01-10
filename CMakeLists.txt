@@ -22,9 +22,53 @@ configure_file ("include/${PROJECT_NAME}/version.hpp" "include/${PROJECT_NAME}/v
 set (TARGETS)
 
 #[===========================================================================[
+  Resources to compile
+]===========================================================================]#
+# Compile some resources to binary
+include(CMakeRC)
+message (STATUS "Configuring noderc::resources")
+if (NOT ${PROJECT_SOURCE_DIR} EQUAL ${PROJECT_BINARY_DIR})
+  # Just for intellisense...
+  configure_file ("include/cmrc/cmrc.hpp" "include/cmrc/cmrc.hpp")
+endif()
+cmrc_add_resource_library(resources
+
+	ALIAS ${PROJECT_NAME}::resources
+	NAMESPACE ${PROJECT_NAME}::resources
+
+  favicon.ico
+)
+# cmrc_add_resources(resources
+#   WHENCE src/img
+#   src/img/icon__32x32.png
+#   src/img/icon__48x48.png
+#   src/img/icon__64x64.png
+#   src/img/icon__96x96.png
+
+#   src/img/icon__144x144.png
+#   src/img/icon__168x168.png
+#   src/img/icon__256x256.png
+#   src/img/icon__512x512.png
+
+#   src/img/w_icon__196x128.png
+#   src/img/w_icon__384x256.png
+#   src/img/w_icon__768x512.png
+#   src/img/w_icon__1024x768.png
+# )
+set_target_properties (resources
+  PROPERTIES
+  ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+  LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+  POSITION_INDEPENDENT_CODE ON
+)
+# # Add the target to the list
+# list(APPEND TARGETS resources)
+
+#[===========================================================================[
   Main project target: Shared library
 ]===========================================================================]#
-message (STATUS "Configuring NodeRC")
+message (STATUS "Configuring noderc::noderc")
 # Add our headers to a list
 set (HEADERS)
 list (APPEND HEADERS
@@ -62,67 +106,25 @@ target_include_directories (${PROJECT_NAME}
 )
 # Create a fileset of 'header' type as part of the library
 target_sources (${PROJECT_NAME}
-
   PUBLIC
+  FILE_SET ${PROJECT_NAME}_PUBLIC_HEADERS
+  TYPE HEADERS
+  BASE_DIRS
+    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+  FILES
+    # include/noderc/noderc.hpp
+    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include/${PROJECT_NAME}/${PROJECT_NAME}.hpp>
+    $<INSTALL_INTERFACE:include/${PROJECT_NAME}/${PROJECT_NAME}.hpp>
 
-    FILE_SET ${PROJECT_NAME}_PUBLIC_HEADERS
-    TYPE HEADERS
-    BASE_DIRS
-        $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
-        $<INSTALL_INTERFACE:include>
-    FILES
-        # include/noderc/noderc.hpp
-        $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include/${PROJECT_NAME}/${PROJECT_NAME}.hpp>
-        $<INSTALL_INTERFACE:include/${PROJECT_NAME}/${PROJECT_NAME}.h>
-
-        # include/noderc/version.hpp
-        $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include/${PROJECT_NAME}/version.hpp>
-        $<INSTALL_INTERFACE:include/${PROJECT_NAME}/version.hpp>
+    # include/noderc/version.hpp
+    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include/${PROJECT_NAME}/version.hpp>
+    $<INSTALL_INTERFACE:include/${PROJECT_NAME}/version.hpp>
 )
 # Include our sources to be compiled
 target_sources (${PROJECT_NAME} PRIVATE ${SOURCE_FILES})
 # Add the target to the list
 list (APPEND TARGETS ${PROJECT_NAME})
-
-#[===========================================================================[
-  Resources to compile
-]===========================================================================]#
-# Compile some resources to binary
-include(CMakeRC)
-message (STATUS "Configuring NodeRC::icons")
-cmrc_add_resource_library(icons
-
-	ALIAS ${PROJECT_NAME}::icons
-	NAMESPACE ${PROJECT_NAME}::icons
-
-  favicon.ico
-)
-# cmrc_add_resources(icons
-#   WHENCE src/img
-#   src/img/icon__32x32.png
-#   src/img/icon__48x48.png
-#   src/img/icon__64x64.png
-#   src/img/icon__96x96.png
-
-#   src/img/icon__144x144.png
-#   src/img/icon__168x168.png
-#   src/img/icon__256x256.png
-#   src/img/icon__512x512.png
-
-#   src/img/w_icon__196x128.png
-#   src/img/w_icon__384x256.png
-#   src/img/w_icon__768x512.png
-#   src/img/w_icon__1024x768.png
-# )
-set_target_properties (icons
-  PROPERTIES
-  ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-  LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-  POSITION_INDEPENDENT_CODE ON
-)
-# # Add the target to the list
-# list(APPEND TARGETS icons)
 
 #[===========================================================================[
   Optional target: NodeJs C++ Addon (requires building from 'npm run build')
@@ -132,7 +134,7 @@ if (-DBUILDING_NODE_EXTENSION IN_LIST CMAKE_CXX_FLAGS)
   include (GetNodeAPIHeaders)
   # Include Node-API wrappers
   include (GetNodeAPIWrappers)
-  message (STATUS "Configuring NodeRC::addon")
+  message (STATUS "Configuring noderc::addon")
   add_library (addon SHARED)
   add_library (${PROJECT_NAME}::addon ALIAS addon)
   target_include_directories (addon
@@ -157,6 +159,13 @@ if (-DBUILDING_NODE_EXTENSION IN_LIST CMAKE_CXX_FLAGS)
   endif ()
   list (APPEND TARGETS addon)
 endif ()
+
+#[===========================================================================[
+  Link targets
+]===========================================================================]#
+
+target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}::resources)
+# target_link_libraries(resources PRIVATE ${PROJECT_NAME}::addon)
 
 #[===========================================================================[
   Export this configuration to share it with other CMake projects
