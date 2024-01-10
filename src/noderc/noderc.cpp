@@ -36,8 +36,8 @@ Napi::Value Open(const Napi::CallbackInfo& args)
 {
   Napi::Env env = args.Env();
 
-  // Arguments required: at least one, and no more than two
-  if (args.Length() < 1)
+  // Arguments required: one only
+  if (args.Length() != 1)
   {
     Napi::TypeError::New(env, "Wrong number of arguments").ThrowAsJavaScriptException();
     return env.Null();
