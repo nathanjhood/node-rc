@@ -53,6 +53,7 @@ When adding to ```RESOURCES```, the items you want to compile should be specifie
 This means that you could add the following entries to the list to be compiled (in ```CMakeLists.txt```):
 ```.cmake
 list (APPEND RESOURCES
+
   # Resources to compile (add more as you please)...
   favicon.ico
   tst.txt

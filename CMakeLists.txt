@@ -21,14 +21,21 @@ configure_file ("include/${PROJECT_NAME}/version.hpp" "include/${PROJECT_NAME}/v
 # Start a list of targets to be built
 set (TARGETS)
 
-# Start a list of resources to compile and serve as Javascript objects
-set (RESOURCES)
-list (APPEND RESOURCES
-  # Resources to compile...
-  favicon.ico
-  tst.txt
-  test/views/layout.pug
-)
+if (NOT DEFINED RESOURCES)
+
+  # Start a list of resources to compile and serve as Javascript objects
+  set (RESOURCES)
+
+  list (APPEND RESOURCES
+
+    # Resources to compile (add more as you please)...
+    favicon.ico
+    tst.txt
+    test/views/layout.pug
+  )
+
+endif ()
+
 
 #[===========================================================================[
   Resources to compile
