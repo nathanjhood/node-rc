@@ -7,7 +7,7 @@ CMakeRC as a NodeJs C++ Addon.
 To see how to serve compiled resources as Javascript objects, follow these steps:
 
 - clone the repo, and ```cd``` into it
-- run ```npm run install``` or ```yarn``` to install the dependencies and build the project
+- run ```npm run install``` or ```yarn``` to install the dependencies and build the test project
 - the file ```/test/index.js``` calls some functions that are defined and exported in ```/src/noderc.cpp```
 - the actual files and directories to be compiled are specified in the ```CMakeLists.txt``` file:
 
