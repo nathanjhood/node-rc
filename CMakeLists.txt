@@ -32,6 +32,9 @@ if (NOT DEFINED RESOURCES)
     favicon.ico
     tst.txt
     test/views/layout.pug # note that the path prefix was used here...
+
+    # try using the 'compare()' function on this file/path!
+    include/${PROJECT_NAME}/version.hpp
   )
 
 endif ()

@@ -122,7 +122,7 @@ const thisWillBeTrueB  = noderc.exists("test/views")
 (method) noderc.compare(file: string, path: string): boolean
 ```
 
-Compare a ```file``` on disk to a  compiled resource at ```path```; returns ```false``` if the ```file``` is not the same size (in bytes) as the compiled resource at ```path```, or if the content of ```file``` (in bytes) does not match the content of the compiled resource at ```path```. Otherwise, returns true. Also prints to ```STDOUT```.
+Compare a ```file``` on disk to a  compiled resource at ```path```; returns ```false``` if the ```file``` is not the same size (in bytes) as the compiled resource at ```path```, or if the content of ```file``` (in bytes) does not match the content of the compiled resource at ```path```. Otherwise, returns true. Can also print to ```STDOUT```.
 
 Example:
 
@@ -143,7 +143,7 @@ const test = noderc.compare("/backup/my_backup_config.cfg", "myconfig.cfg")
 (method) noderc.compareSize(file: string, path: string): boolean
 ```
 
-Compare a ```file``` on disk to a  compiled resource at ```path```; returns ```false``` if the ```file``` is not the same size (in bytes) as the compiled resource at ```path```. Otherwise, returns true. Also prints to ```STDOUT```.
+Compare a ```file``` on disk to a  compiled resource at ```path```; returns ```false``` if the ```file``` is not the same size (in bytes) as the compiled resource at ```path```. Otherwise, returns true. Can also print to ```STDOUT```.
 
 Example:
 ```.js
@@ -156,7 +156,7 @@ const trueIfSameSize = noderc.compareSize("/home/myconfig.cfg", "myconfig.cfg")
 (method) noderc.compareContent(file: string, path: string): boolean
 ```
 
-Compare a ```file``` on disk to a  compiled resource at ```path```; returns ```false``` if the ```file``` does not match (in byte-to-byte comparison) the compiled resource at ```path```. Otherwise, returns true. Also prints to ```STDOUT```.
+Compare a ```file``` on disk to a  compiled resource at ```path```; returns ```false``` if the ```file``` does not match (in byte-to-byte comparison) the compiled resource at ```path```. Otherwise, returns true. Can also print to ```STDOUT```.
 
 Example:
 ```.js

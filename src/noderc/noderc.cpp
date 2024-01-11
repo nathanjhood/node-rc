@@ -233,17 +233,17 @@ Napi::Value Compare(const Napi::CallbackInfo& args)
 
   if (rc_size != fs_size)
   {
-    std::cerr << "File sizes do not match: FS == " << fs_size << ", RC == " << rc_size << "\n";
+    // std::cerr << "File sizes do not match: FS == " << fs_size << ", RC == " << rc_size << "\n";
     return Napi::Boolean::New(env, false);
   }
 
   if (!std::equal(arg1_rc.begin(), arg1_rc.end(), iter(arg0_fs)))
   {
-    std::cerr << "File contents do not match\n";
+    // std::cerr << "File contents do not match\n";
     return Napi::Boolean::New(env, false);
   }
 
-  std::cout << "File contents match: FS == " << arg0 << ", RC == " << arg1 << "\n";
+  // std::cout << "File contents match: FS == " << arg0 << ", RC == " << arg1 << "\n";
   return Napi::Boolean::New(env, true);
 }
 
@@ -305,11 +305,11 @@ Napi::Value CompareSize(const Napi::CallbackInfo& args)
 
   if (rc_size != fs_size)
   {
-    std::cerr << "File sizes do not match: FS == " << fs_size << ", RC == " << rc_size << "\n";
+    // std::cerr << "File sizes do not match: FS == " << fs_size << ", RC == " << rc_size << "\n";
     return Napi::Boolean::New(env, false);
   }
 
-  std::cout << "File sizes match:    FS == " << arg0 << ", RC == " << arg1 << "\n";
+  // std::cout << "File sizes match:    FS == " << arg0 << ", RC == " << arg1 << "\n";
   return Napi::Boolean::New(env, true);
 }
 
@@ -369,11 +369,11 @@ Napi::Value CompareContent(const Napi::CallbackInfo& args)
 
   if (!std::equal(arg1_rc.begin(), arg1_rc.end(), iter(arg0_fs)))
   {
-    std::cerr << "File contents do not match\n";
+    // std::cerr << "File contents do not match\n";
     return Napi::Boolean::New(env, false);
   }
 
-  std::cout << "File contents match: FS == " << arg0 << ", RC == " << arg1 << "\n";
+  // std::cout << "File contents match: FS == " << arg0 << ", RC == " << arg1 << "\n";
   return Napi::Boolean::New(env, true);
 }
 
