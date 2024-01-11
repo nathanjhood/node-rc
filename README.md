@@ -29,7 +29,7 @@ list (APPEND RESOURCES
 ```
 
 - the resources added to the above list shall be available in Javascript with ```noderc.open("filename")```.
-- see the test file for further functionality, such as testing if a given filename or directory exists (within the compiled library)
+- [see the test file](https://github.com/nathanjhood/noderc/blob/main/test/index.js) for further functionality, such as testing if a given filename or directory exists (within the compiled library), or whether a file on disk matches the compiled resource (an excellent safety feature).
 - run the tests with ```npm run start``` or ```yarn start```
 
 ## Acknowledgements
