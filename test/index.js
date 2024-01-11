@@ -2,56 +2,57 @@ const noderc = require("../lib/noderc.node");
 
 console.log(noderc.hello());
 console.log(noderc.version());
+console.log("\n");
 
 function doTest(tst) {
 
   if(!noderc.exists(tst)) {
-    console.log("Entry '%s' does not exist.", tst)
+    console.log(" \u{2715} Entry '%s' does not exist.\n", tst)
     return false;
   }
 
   if(noderc.isFile(tst)) {
 
     // Do file functions...
-    console.log("Contents of '%s' = \n%s", tst, noderc.open(tst))
+    console.log(" \u{2713} Contents of '%s' = \n\n%s\n", tst, noderc.open(tst))
     return true;
   }
 
   if(noderc.isDirectory(tst)) {
 
     // Do directory functions...
-    console.log("Entry '%s' is a directory", tst)
+    console.log(" \u{2713} Entry '%s' is a directory.\n", tst)
     return true;
   }
 
-  console.log("Entry exists, but is neither a file nor a directory... this should never happen.")
+  console.log(" \u{2715} Entry exists, but is neither a file nor a directory... this should never happen.\n")
   return false;
 }
 
 function doCompareSize(a, b) {
   if (!noderc.compareSize(a, b)) {
-    console.log("File '%s' size does not match the compiled resource '%s' size.", a, b)
+    console.log(" \u{2715} File '%s' size does not match the compiled resource '%s' size.", a, b)
     return false;
   }
-  console.log("File '%s' size matches the compiled resource '%s' size.", a, b)
+  console.log(" \u{2713} File '%s' size matches the compiled resource '%s' size.", a, b)
   return true;
 }
 
 function doCompareContent(a, b) {
   if (!noderc.compareContent(a, b)) {
-    console.log("File '%s' content does not match the compiled resource '%s' content.", a, b)
+    console.log(" \u{2715} File '%s' content does not match the compiled resource '%s' content.", a, b)
     return false;
   }
-  console.log("File '%s' content matches the compiled resource '%s' content.", a, b)
+  console.log(" \u{2713} File '%s' content matches the compiled resource '%s' content.", a, b)
   return true;
 }
 
 function doCompare(a, b) {
   if (!noderc.compare(a, b)) {
-    console.log("File '%s' does not match the compiled resource '%s'.", a, b)
+    console.log(" \u{2715} File '%s' does not match the compiled resource '%s'.", a, b)
     return false;
   }
-  console.log("File '%s' matches the compiled resource '%s'.", a, b)
+  console.log(" \u{2713} File '%s' matches the compiled resource '%s'.", a, b)
   return true;
 }
 
@@ -60,6 +61,7 @@ function doComparisons(a, b) {
   result = doCompareSize   (a, b);
   result = doCompareContent(a, b);
   result = doCompare       (a, b);
+  console.log("\n");
   return result;
 }
 
@@ -75,7 +77,7 @@ const resC = doTest(tstC);
 const tstD = "/usr";
 const resD = doTest(tstD);
 
-const tstE = "/tst.txt";
+const tstE = "/test/views/layout.pug";
 const resE = doTest(tstE);
 
 const tstF = "include/noderc";
