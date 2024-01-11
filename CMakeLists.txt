@@ -21,6 +21,14 @@ configure_file ("include/${PROJECT_NAME}/version.hpp" "include/${PROJECT_NAME}/v
 # Start a list of targets to be built
 set (TARGETS)
 
+# Start a list of resources to compile and serve as Javascript objects
+set (RESOURCES)
+list (APPEND RESOURCES
+  # Resources to compile...
+  favicon.ico
+  tst.txt
+)
+
 #[===========================================================================[
   Resources to compile
 ]===========================================================================]#
@@ -30,15 +38,15 @@ message (STATUS "Configuring noderc::resources")
 if (NOT ${PROJECT_SOURCE_DIR} EQUAL ${PROJECT_BINARY_DIR})
   # Just for intellisense...
   configure_file ("include/cmrc/cmrc.hpp" "include/cmrc/cmrc.hpp")
-endif()
+endif ()
+# Create a CMakeRC library
 cmrc_add_resource_library(resources
-
 	ALIAS ${PROJECT_NAME}::resources
 	NAMESPACE ${PROJECT_NAME}::resources
-
-  favicon.ico
-  tst.txt
+  # Resources to compile...
+  ${RESOURCES}
 )
+# Place it int he correct output dir
 set_target_properties (resources
   PROPERTIES
   ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
@@ -46,6 +54,7 @@ set_target_properties (resources
   RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
   POSITION_INDEPENDENT_CODE ON
 )
+# Add it (and the CMakeRC dependency) to the targets
 list (APPEND TARGETS resources cmrc-base)
 
 #[===========================================================================[
