@@ -15,7 +15,7 @@ interface noderc {
 
   /**
    * Opens and returns a non-directory file object at ```path```, or throws
-   * ```std::system_error()``` on error.
+   * ```std::system_error()``` (as a Javascript exception) on error.
    * @param path
    * @returns string
    */
