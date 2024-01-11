@@ -55,13 +55,14 @@ if (NOT ${PROJECT_SOURCE_DIR} EQUAL ${PROJECT_BINARY_DIR})
   configure_file ("include/cmrc/cmrc.hpp" "include/cmrc/cmrc.hpp")
 endif ()
 # Create a CMakeRC library
+# See https://github.com/vector-of-bool/cmrc/blob/master/README.md#usage
 cmrc_add_resource_library(resources
 	ALIAS ${PROJECT_NAME}::resources
 	NAMESPACE ${PROJECT_NAME}::resources
   # Resources to compile...
   ${RESOURCES}
 )
-# Place it int he correct output dir
+# Place it in the correct output dir
 set_target_properties (resources
   PROPERTIES
   ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
@@ -81,6 +82,7 @@ if (-DBUILDING_NODE_EXTENSION IN_LIST CMAKE_CXX_FLAGS)
   # Include Node-API wrappers
   include (GetNodeAPIWrappers)
   message (STATUS "Configuring noderc::noderc")
+  # Create a Node C++ Addon as a dynamic library
   add_library (${PROJECT_NAME} SHARED)
   add_library (${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
   target_include_directories (${PROJECT_NAME}
