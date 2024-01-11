@@ -49,7 +49,7 @@ const resF = doTest(tstF);
 const tstG = "test/views/layout.pug";
 const resG = doTest(tstG);
 
-if(!noderc.diff(tstG, tstG)) {
+if(!noderc.diff(tstA, tstE)) {
   console.log("File '%s' does not match the compiled resource '%s'.", tstG, tstG)
   return false;
 }
