@@ -65,7 +65,7 @@ Now, the added ```layout.pug``` file should be available via ```noderc.open()```
 ```.js
 const tst_txt     = noderc.open("tst.txt");
 const favicon_ico = noderc.open("favicon.ico");
-const layout_pug  = noderc.open("test/views/layout.pug");
+const layout_pug  = noderc.open("test/views/layout.pug"); // path prefix required
 ```
 
 ## ```noderc.isFile()```
