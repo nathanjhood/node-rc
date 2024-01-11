@@ -2,15 +2,6 @@
 
 CMakeRC as a NodeJs C++ Addon.
 
-## Requirements
-
-- NodeJs
-- CMake
-- A C/C++ compiler toolchain (GCC, LLVM, MSVC...)
-- A build generator (Ninja, Make, MSVC...)
-
-The remaining dependencies either ship with the repo (such as the 'CMakeRC.cmake' file), or are acquired when running ```npm install``` or ```yarn install``` to initialize the project.
-
 ## Usage
 
 To see how to serve compiled resources as Javascript objects, follow these steps:
@@ -32,9 +23,18 @@ list (APPEND RESOURCES
 - [see the test file](https://github.com/nathanjhood/noderc/blob/main/test/index.js) for further functionality, such as testing if a given filename or directory exists (within the compiled library), or whether a file on disk matches the compiled resource (an excellent safety feature).
 - run the tests with ```npm run start``` or ```yarn start```
 
+## Requirements
+
+- NodeJs
+- CMake
+- A C/C++ compiler toolchain (GCC, LLVM, MSVC...)
+- A build generator (Ninja, Make, MSVC...)
+
+The remaining dependencies either ship with the repo (such as the 'CMakeRC.cmake' file), or are acquired when running ```npm install``` or ```yarn install``` to initialize the project.
+
 ## Docs
 
-### ```noderc.open()```
+## ```noderc.open()```
 
 ```.js
 (method) noderc.open(path: string): string
@@ -54,21 +54,21 @@ This means that you could add the following entries to the list to be compiled (
 ```.cmake
 list (APPEND RESOURCES
 
-  # Resources to compile (add more as you please)...
+  # Resources to compile (add/remove as you please)...
   favicon.ico
   tst.txt
   test/views/layout.pug # note that the path prefix was used here...
 )
 ```
 
-Now, the ```layout.pug``` file should be available via ```noderc.open()```, but you must specifiy the entire path prefix in order to find it:
+Now, the added ```layout.pug``` file should be available via ```noderc.open()```, but you must specifiy the entire path prefix in order to find it:
 ```.js
 const tst_txt     = noderc.open("tst.txt");
 const favicon_ico = noderc.open("favicon.ico");
 const layout_pug  = noderc.open("test/views/layout.pug");
 ```
 
-### ```noderc.isFile()```
+## ```noderc.isFile()```
 
 ```.js
 (method) noderc.isFile(path: string): boolean
@@ -82,7 +82,7 @@ const thisWillBeFalse = noderc.isFile("test/views")
 const thisWillBeTrue  = noderc.isFile("test/views/layout.pug")
 ```
 
-### ```noderc.isDirectory()```
+## ```noderc.isDirectory()```
 
 ```.js
 (method) noderc.isDirectory(path: string): boolean
@@ -96,7 +96,7 @@ const thisWillBeFalse = noderc.isDirectory("test/views/layout.pug")
 const thisWillBeTrue  = noderc.isDirectory("test/views")
 ```
 
-### ```noderc.exists()```
+## ```noderc.exists()```
 
 ```.js
 (method) noderc.exists(path: string): boolean
@@ -116,7 +116,7 @@ const thisWillBeTrueA  = noderc.exists("test/views/layout.pug")
 const thisWillBeTrueB  = noderc.exists("test/views")
 ```
 
-### ```noderc.diff()```
+## ```noderc.diff()```
 
 ```.js
 (method) noderc.diff(file: string, path: string): boolean
@@ -136,6 +136,10 @@ test = false, *if* the file (param A) does not match the resource (param B)
 ```.js
 const test = noderc.diff("/backup/my_backup_config.cfg", "myconfig.cfg")
 ```
+
+## Thanks for reading!
+
+[Nathan J. Hood](https://github.com/nathanjhood)
 
 ## Acknowledgements
 

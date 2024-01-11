@@ -28,10 +28,10 @@ if (NOT DEFINED RESOURCES)
 
   list (APPEND RESOURCES
 
-    # Resources to compile (add more as you please)...
+    # Resources to compile (add/remove as you please)...
     favicon.ico
     tst.txt
-    test/views/layout.pug
+    test/views/layout.pug # note that the path prefix was used here...
   )
 
 endif ()
