@@ -14,6 +14,11 @@
 
 #include "noderc/version.hpp"
 
+#include <algorithm>
+#include <fstream>
+#include <iostream>
+#include <iterator>
+
 #include <napi.h>
 
 #include <cmrc/cmrc.hpp>
@@ -160,6 +165,67 @@ Napi::Value Exists(const Napi::CallbackInfo& args) {
   return Napi::Boolean::New(env, fs.exists(args[0].ToString().Utf8Value()));
 }
 
+Napi::Value Diff(const Napi::CallbackInfo& args) {
+// int main(int argc, char** argv) {
+
+  Napi::Env env = args.Env();
+
+  // Arguments required: one only
+  if (args.Length() != 2)
+  {
+    Napi::TypeError::New(env, "Wrong number of arguments").ThrowAsJavaScriptException();
+    return env.Null();
+  }
+
+  auto arg0 = args[0].ToString().Utf8Value();
+  auto arg1 = args[1].ToString().Utf8Value();
+
+  std::ifstream arg0_fs{arg0.data(), std::ios_base::binary};
+
+  if (!arg0_fs) {
+    Napi::TypeError::New(env, "Invalid filename").ThrowAsJavaScriptException();
+    return env.Null();
+  }
+
+  using iter         = std::istreambuf_iterator<char>;
+  const auto fs_size = std::distance(iter(arg0_fs), iter());
+  arg0_fs.seekg(0);
+
+  auto       fs      = cmrc::noderc::resources::get_filesystem();
+
+  if (!fs.exists(arg1)) {
+    Napi::TypeError::New(env, "Invalid filename: Does not exist").ThrowAsJavaScriptException();
+    return env.Null();
+  }
+
+  if (fs.is_directory(arg1)) {
+    Napi::TypeError::New(env, "Invalid filename: Is a directory").ThrowAsJavaScriptException();
+    return env.Null();
+  }
+
+  if (!fs.is_file(arg1)) {
+    Napi::TypeError::New(env, "Invalid filename: Is not a file").ThrowAsJavaScriptException();
+    return env.Null();
+  }
+
+  auto       arg1_rc   = fs.open(arg1);
+  const auto rc_size   = std::distance(arg1_rc.begin(), arg1_rc.end());
+
+  if (rc_size != fs_size) {
+    std::cerr << "File sizes do not match: FS == " << fs_size << ", RC == " << rc_size << "\n";
+    return Napi::Boolean::New(env, false);
+  }
+
+  if (!std::equal(arg1_rc.begin(), arg1_rc.end(), iter(arg0_fs))) {
+    std::cerr << "File contents do not match\n";
+    return Napi::Boolean::New(env, false);
+  }
+
+  std::cout << "File contents match\n";
+  return Napi::Boolean::New(env, true);
+}
+
+
 // Construct an 'initializer' object that carries our functions
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
 
@@ -192,6 +258,11 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set(
     Napi::String::New(env, "exists"),
     Napi::Function::New(env, Exists)
+  );
+
+  exports.Set(
+    Napi::String::New(env, "diff"),
+    Napi::Function::New(env, Diff)
   );
 
   // The above will expose the C++ function 'Hello' as a javascript function named 'hello', etc...

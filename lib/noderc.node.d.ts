@@ -5,6 +5,7 @@ declare interface noderc {
   isFile(path: string): boolean;
   isDirectory(path: string): boolean;
   exists(path: string): boolean;
+  diff(file: string, path: string): boolean;
 }
 declare const noderc: noderc;
 export = noderc;
