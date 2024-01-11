@@ -116,10 +116,10 @@ const thisWillBeTrueA  = noderc.exists("test/views/layout.pug")
 const thisWillBeTrueB  = noderc.exists("test/views")
 ```
 
-## ```noderc.diff()```
+## ```noderc.compare()```
 
 ```.js
-(method) noderc.diff(file: string, path: string): boolean
+(method) noderc.compare(file: string, path: string): boolean
 ```
 
 Compare a ```file``` on disk to a  compiled resource at ```path```; returns ```false``` if the ```file``` is not the same size (in bytes) as the compiled resource at ```path```, or if the content of ```file``` (in bytes) does not match the content of the compiled resource at ```path```. Otherwise, returns true. Also prints to ```STDOUT```.
@@ -130,11 +130,37 @@ Say we have a file located on disk at ```/home/myconfig.cfg```, and that we comp
 
 test = true, *if* the file (param A) matches the resource (param B)
 ```.js
-const test = noderc.diff("/home/myconfig.cfg", "myconfig.cfg")
+const test = noderc.compare("/home/myconfig.cfg", "myconfig.cfg")
 ```
 test = false, *if* the file (param A) does not match the resource (param B)
 ```.js
-const test = noderc.diff("/backup/my_backup_config.cfg", "myconfig.cfg")
+const test = noderc.compare("/backup/my_backup_config.cfg", "myconfig.cfg")
+```
+
+## ```noderc.compareSize()```
+
+```.js
+(method) noderc.compareSize(file: string, path: string): boolean
+```
+
+Compare a ```file``` on disk to a  compiled resource at ```path```; returns ```false``` if the ```file``` is not the same size (in bytes) as the compiled resource at ```path```. Otherwise, returns true. Also prints to ```STDOUT```.
+
+Example:
+```.js
+const trueIfSameSize = noderc.compareSize("/home/myconfig.cfg", "myconfig.cfg")
+```
+
+## ```noderc.compareContent()```
+
+```.js
+(method) noderc.compareContent(file: string, path: string): boolean
+```
+
+Compare a ```file``` on disk to a  compiled resource at ```path```; returns ```false``` if the ```file``` does not match (in byte-to-byte comparison) the compiled resource at ```path```. Otherwise, returns true. Also prints to ```STDOUT```.
+
+Example:
+```.js
+const trueIfSameBytes = noderc.compareContent("/home/myconfig.cfg", "myconfig.cfg")
 ```
 
 ## Thanks for reading!

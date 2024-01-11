@@ -49,7 +49,17 @@ const resF = doTest(tstF);
 const tstG = "test/views/layout.pug";
 const resG = doTest(tstG);
 
-if(!noderc.diff(tstA, tstE)) {
+if(!noderc.compare(tstA, tstE)) {
   console.log("File '%s' does not match the compiled resource '%s'.", tstG, tstG)
+  return false;
+}
+
+if(!noderc.compareSize(tstA, tstE)) {
+  console.log("File '%s' size does not match the compiled resource '%s' size.", tstG, tstG)
+  return false;
+}
+
+if(!noderc.compareContent(tstA, tstE)) {
+  console.log("File '%s' content does not match the compiled resource '%s' content.", tstG, tstG)
   return false;
 }
