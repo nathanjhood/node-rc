@@ -23,13 +23,15 @@ list (APPEND RESOURCES
 - [see the test file](https://github.com/nathanjhood/noderc/blob/main/test/index.js) for further functionality, such as testing if a given filename or directory exists (within the compiled library), or whether a file on disk matches the compiled resource (an excellent safety feature).
 - run the tests with ```npm run start``` or ```yarn start```
 
-To build your own custom resource library and use it oin your NodeJs projects:
+## Build your own
+
+To build your own custom resource library and use it in your own NodeJs projects:
 
 - fork this repo, and add the URL of your fork to the ```package.json``` dependencies of a seperate, new NodeJs project
 ```.json
 "dependencies": {
     "@<GithubUserName>/noderc": "https://github.com/<GithubUserName>/noderc",
-    //....
+    // etc...
 }
 ```
 - customize the ```RESOURCES``` to be compiled in ```CMakeLists.txt``` - they also need to be under version control - and push your changes to your fork
