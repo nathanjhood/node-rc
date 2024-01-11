@@ -27,6 +27,7 @@ list (APPEND RESOURCES
   # Resources to compile...
   favicon.ico
   tst.txt
+  test/views/layout.pug
 )
 
 #[===========================================================================[

@@ -42,3 +42,9 @@ const resD = doTest(tstD);
 
 const tstE = "/tst.txt";
 const resE = doTest(tstE);
+
+const tstF = "test/views";
+const resF = doTest(tstF);
+
+const tstG = "test/views/layout.pug";
+const resG = doTest(tstG);
