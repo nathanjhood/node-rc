@@ -4,7 +4,7 @@ CMakeRC as a NodeJs C++ Addon.
 
 ## Usage
 
-To see how to serve compiled resources as Javascript objects, follow these steps:
+To see how to serve binary-compiled resources as Javascript objects, follow these steps:
 
 - clone the repo, and ```cd``` into it
 - run ```npm run install``` or ```yarn``` to install the dependencies and build the test project
@@ -22,6 +22,31 @@ list (APPEND RESOURCES
 - the resources added to the above list shall be available in Javascript with ```noderc.open("filename")```.
 - [see the test file](https://github.com/nathanjhood/noderc/blob/main/test/index.js) for further functionality, such as testing if a given filename or directory exists (within the compiled library), or whether a file on disk matches the compiled resource (an excellent safety feature).
 - run the tests with ```npm run start``` or ```yarn start```
+
+To build your own custom resource library and use it oin your NodeJs projects:
+
+- fork this repo, and add the URL of your fork to the ```package.json``` dependencies of a seperate, new NodeJs project
+```.json
+"dependencies": {
+    "@<GithubUserName>/noderc": "https://github.com/<GithubUserName>/noderc",
+    //....
+}
+```
+- customize the ```RESOURCES``` to be compiled in ```CMakeLists.txt``` - they also need to be under version control - and push your changes to your fork
+- run ```npm run install``` or ```yarn``` in your new NodeJs project to acquire and build your library
+- your library will be available in your new NodeJs project by requiring/importing:
+
+```.js
+const noderc = require("@<GithubUserName>/noderc")
+
+// or
+
+import noderc from '@<GithubUserName>/noderc'
+
+// then
+
+const my_compiled_resource = noderc.open("somefile.ext")
+```
 
 ## Requirements
 
