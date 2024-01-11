@@ -32,13 +32,17 @@ if (NOT DEFINED RESOURCES)
     favicon.ico
     tst.txt
     test/views/layout.pug # note that the path prefix was used here...
-
-    # try using the 'compare()' function on this file/path!
-    include/${PROJECT_NAME}/version.hpp
   )
 
 endif ()
 
+# We can append as many resources as we wish, or even start a second
+# library list if need be... the below file is not required; just
+# useful for tests and demonstration purposes.
+list (APPEND RESOURCES
+  # try using the 'compare()' function on this file/path!
+  include/${PROJECT_NAME}/version.hpp
+)
 
 #[===========================================================================[
   Resources to compile
