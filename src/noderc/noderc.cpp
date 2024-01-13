@@ -51,14 +51,14 @@ Napi::Value Open(const Napi::CallbackInfo& args)
   // Arguments required: one only
   if (args.Length() != 1)
   {
-    Napi::TypeError::New(env, "Wrong number of arguments").ThrowAsJavaScriptException();
+    Napi::TypeError::New(env, "Wrong number of arguments! Expected exactly one argument.").ThrowAsJavaScriptException();
     return env.Null();
   }
 
   // Param 1 must be a string
   if (!args[0].IsString())
   {
-    Napi::TypeError::New(env, "Wrong argument type!").ThrowAsJavaScriptException();
+    Napi::TypeError::New(env, "Wrong argument type! Expected a string.").ThrowAsJavaScriptException();
     return env.Null();
   }
 
@@ -113,14 +113,14 @@ Napi::Value IsFile(const Napi::CallbackInfo& args)
   // Arguments required: one only
   if (args.Length() != 1)
   {
-    Napi::TypeError::New(env, "Wrong number of arguments").ThrowAsJavaScriptException();
+    Napi::TypeError::New(env, "Wrong number of arguments! Expected exactly one argument.").ThrowAsJavaScriptException();
     return env.Null();
   }
 
   // Param 1 must be a string
   if (!args[0].IsString())
   {
-    Napi::TypeError::New(env, "Wrong argument type!").ThrowAsJavaScriptException();
+    Napi::TypeError::New(env, "Wrong argument type! Expected a string.").ThrowAsJavaScriptException();
     return env.Null();
   }
 
@@ -136,14 +136,14 @@ Napi::Value IsDirectory(const Napi::CallbackInfo& args)
   // Arguments required: one only
   if (args.Length() != 1)
   {
-    Napi::TypeError::New(env, "Wrong number of arguments").ThrowAsJavaScriptException();
+    Napi::TypeError::New(env, "Wrong number of arguments! Expected exactly one argument.").ThrowAsJavaScriptException();
     return env.Null();
   }
 
   // Param 1 must be a string
   if (!args[0].IsString())
   {
-    Napi::TypeError::New(env, "Wrong argument type!").ThrowAsJavaScriptException();
+    Napi::TypeError::New(env, "Wrong argument type! Expected a string.").ThrowAsJavaScriptException();
     return env.Null();
   }
 
@@ -159,14 +159,14 @@ Napi::Value Exists(const Napi::CallbackInfo& args)
   // Arguments required: one only
   if (args.Length() != 1)
   {
-    Napi::TypeError::New(env, "Wrong number of arguments").ThrowAsJavaScriptException();
+    Napi::TypeError::New(env, "Wrong number of arguments! Expected exactly one argument.").ThrowAsJavaScriptException();
     return env.Null();
   }
 
   // Param 1 must be a string
   if (!args[0].IsString())
   {
-    Napi::TypeError::New(env, "Wrong argument type!").ThrowAsJavaScriptException();
+    Napi::TypeError::New(env, "Wrong argument type! Expected a string.").ThrowAsJavaScriptException();
     return env.Null();
   }
 
@@ -182,14 +182,14 @@ Napi::Value Compare(const Napi::CallbackInfo& args)
   // Arguments required: two only
   if (args.Length() != 2)
   {
-    Napi::TypeError::New(env, "Wrong number of arguments").ThrowAsJavaScriptException();
+    Napi::TypeError::New(env, "Wrong number of arguments! Expected exactly two arguments.").ThrowAsJavaScriptException();
     return env.Null();
   }
 
   // Params must be strings
   if (!args[0].IsString() || !args[1].IsString())
   {
-    Napi::TypeError::New(env, "Wrong argument type!").ThrowAsJavaScriptException();
+    Napi::TypeError::New(env, "Wrong argument type! Expected a string.").ThrowAsJavaScriptException();
     return env.Null();
   }
 
@@ -254,14 +254,14 @@ Napi::Value CompareSize(const Napi::CallbackInfo& args)
   // Arguments required: two only
   if (args.Length() != 2)
   {
-    Napi::TypeError::New(env, "Wrong number of arguments").ThrowAsJavaScriptException();
+    Napi::TypeError::New(env, "Wrong number of arguments! Expected exactly two arguments.").ThrowAsJavaScriptException();
     return env.Null();
   }
 
   // Params must be strings
   if (!args[0].IsString() || !args[1].IsString())
   {
-    Napi::TypeError::New(env, "Wrong argument type!").ThrowAsJavaScriptException();
+    Napi::TypeError::New(env, "Wrong argument type! Expected a string.").ThrowAsJavaScriptException();
     return env.Null();
   }
 
@@ -320,14 +320,14 @@ Napi::Value CompareContent(const Napi::CallbackInfo& args)
   // Arguments required: two only
   if (args.Length() != 2)
   {
-    Napi::TypeError::New(env, "Wrong number of arguments").ThrowAsJavaScriptException();
+    Napi::TypeError::New(env, "Wrong number of arguments! Expected exactly two arguments.").ThrowAsJavaScriptException();
     return env.Null();
   }
 
   // Params must be strings
   if (!args[0].IsString() || !args[1].IsString())
   {
-    Napi::TypeError::New(env, "Wrong argument type!").ThrowAsJavaScriptException();
+    Napi::TypeError::New(env, "Wrong argument type! Expected a string.").ThrowAsJavaScriptException();
     return env.Null();
   }
 
