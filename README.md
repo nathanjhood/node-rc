@@ -63,6 +63,7 @@ The remaining dependencies either ship with the repo (such as the 'CMakeRC.cmake
 
 The ```build``` step generates a dynamic library in the output directory. The contents of the dynamic library work like an 'embedded' file system - the files listed in ```RESOURCES``` are compiled in to this embedded filesystem, making their contents available as a ```file``` and their path prefixes available as a ```directory``` tree.
 
+The functionality exposed by this interface just provides and exports Javascript-side wrappers around the [CMakeRC](https://github.com/vector-of-bool.git) functions.
 
 ## ```noderc.open()```
 
