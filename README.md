@@ -61,6 +61,9 @@ The remaining dependencies either ship with the repo (such as the 'CMakeRC.cmake
 
 ## Docs
 
+The ```build``` step generates a dynamic library in the output directory. The contents of the dynamic library work like an 'embedded' file system - the files listed in ```RESOURCES``` are compiled in to this embedded filesystem, making their contents available as a ```file``` and their path prefixes available as a ```directory``` tree.
+
+
 ## ```noderc.open()```
 
 ```.js
