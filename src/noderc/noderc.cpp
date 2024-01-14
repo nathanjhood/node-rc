@@ -19,6 +19,7 @@
 #include <fstream>
 #include <iostream>
 #include <iterator>
+#include <string>
 
 // Get Node Addon API
 #include <napi.h>
@@ -40,6 +41,52 @@ namespace addon
 /** @addtogroup addon
  *  @{
  */
+
+bool iterate_filesystem(Napi::Env env, cmrc::embedded_filesystem fs, const std::string &path, Napi::Object obj);
+
+bool iterate_filesystem(Napi::Env env, cmrc::embedded_filesystem fs, const std::string &path, Napi::Object obj) {
+
+  using bytes = std::vector<char>;
+  bool b = false;
+
+  for (auto&& entry : fs.iterate_directory(path))
+  {
+    std::string p;
+      p += path;
+      p += "/";
+      p += entry.filename();
+
+    if(entry.is_file()) {
+
+      bytes chunk;
+
+      auto data = fs.open(p);
+
+      chunk.reserve(data.size());
+
+      for (auto i = data.begin(); i != data.end(); i++) {
+        chunk.emplace_back(*i);
+      }
+
+      obj.Set(
+        Napi::String::New(env, entry.filename()),                       // Key
+        Napi::String::New(env, std::string(chunk.begin(), chunk.end())) // Val
+      );
+
+      p.clear();
+      chunk.clear();
+
+    }
+
+    else if(entry.is_directory())  {
+
+      b = noderc::addon::iterate_filesystem(env, fs, p, obj);
+      p.clear();
+    }
+  }
+
+  return true;
+}
 
 /**
  * @brief
@@ -291,10 +338,10 @@ Napi::Value Compare(const Napi::CallbackInfo& args)
 }
 
 /**
- * @brief 
- * 
- * @param args 
- * @return Napi::Value 
+ * @brief
+ *
+ * @param args
+ * @return Napi::Value
  */
 Napi::Value CompareSize(const Napi::CallbackInfo& args)
 {
@@ -363,10 +410,10 @@ Napi::Value CompareSize(const Napi::CallbackInfo& args)
 }
 
 /**
- * @brief 
- * 
- * @param args 
- * @return Napi::Value 
+ * @brief
+ *
+ * @param args
+ * @return Napi::Value
  */
 Napi::Value CompareContent(const Napi::CallbackInfo& args)
 {
@@ -438,11 +485,11 @@ Napi::Value CompareContent(const Napi::CallbackInfo& args)
  * @param args
  * @return Napi::Value
  */
-Napi::Value Object(const Napi::CallbackInfo& args)
+Napi::Value GetFileSystemObject(const Napi::CallbackInfo& args)
 {
   Napi::Env env = args.Env();
 
-  // Arguments required: one only
+  // Arguments required: exactly none
   if (args.Length() != 0)
   {
     Napi::TypeError::New(env, "Wrong number of arguments! Expected none.").ThrowAsJavaScriptException();
@@ -450,30 +497,11 @@ Napi::Value Object(const Napi::CallbackInfo& args)
   }
 
   using bytes = std::vector<char>;
+
   auto fs = cmrc::noderc::resources::get_filesystem();
   auto obj = Napi::Object::New(env);
 
-  for (auto&& entry : fs.iterate_directory(""))
-  {
-    if(entry.is_file()) {
-
-      bytes chunk;
-      auto data = fs.open(entry.filename());
-      chunk.reserve(data.size());
-      for (auto i = data.begin(); i != data.end(); i++) {
-        chunk.emplace_back(*i);
-      }
-      obj.Set(
-        Napi::String::New(env, entry.filename()),                       // Key
-        Napi::String::New(env, std::string(chunk.begin(), chunk.end())) // Val
-      );
-      chunk.clear();
-    }
-    // else if(entry.is_directory())  {
-    //   for (auto&& dir : fs.iterate_directory(entry.filename())) {
-    //   }
-    // }
-  }
+  auto a = noderc::addon::iterate_filesystem(env, fs, "", obj);
 
   return obj;
 }
@@ -525,6 +553,11 @@ Napi::Object Init(Napi::Env env, Napi::Object exports)
   exports.Set(
     Napi::String::New(env, "compareContent"),
     Napi::Function::New(env, CompareContent)
+  );
+
+  exports.Set(
+    Napi::String::New(env, "getFileSystemObject"),
+    Napi::Function::New(env, GetFileSystemObject)
   );
 
   // The above will expose the C++ function 'Hello' as a javascript function named 'hello', etc...

@@ -88,3 +88,5 @@ const resG = doTest(tstG);
 
 const comparisonA = doComparisons("tst.txt", "/tst.txt");
 const comparisonB = doComparisons("include/noderc/version.hpp", "include/noderc/version.hpp");
+
+console.log(noderc.getFileSystemObject());
