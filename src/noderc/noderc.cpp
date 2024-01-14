@@ -15,6 +15,7 @@
 #include "noderc/version.hpp"
 
 #include <algorithm>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <iterator>
@@ -375,6 +376,46 @@ Napi::Value CompareContent(const Napi::CallbackInfo& args)
 
   // std::cout << "File contents match: FS == " << arg0 << ", RC == " << arg1 << "\n";
   return Napi::Boolean::New(env, true);
+}
+
+Napi::Value Object(const Napi::CallbackInfo& args)
+{
+  Napi::Env env = args.Env();
+
+  // Arguments required: one only
+  if (args.Length() != 0)
+  {
+    Napi::TypeError::New(env, "Wrong number of arguments! Expected none.").ThrowAsJavaScriptException();
+    return env.Null();
+  }
+
+  using bytes = std::vector<char>;
+  auto fs = cmrc::noderc::resources::get_filesystem();
+  auto obj = Napi::Object::New(env);
+
+  for (auto&& entry : fs.iterate_directory(""))
+  {
+    if(entry.is_file()) {
+
+      bytes chunk;
+      auto data = fs.open(entry.filename());
+      chunk.reserve(data.size());
+      for (auto i = data.begin(); i != data.end(); i++) {
+        chunk.emplace_back(*i);
+      }
+      obj.Set(
+        Napi::String::New(env, entry.filename()),                       // Key
+        Napi::String::New(env, std::string(chunk.begin(), chunk.end())) // Val
+      );
+      chunk.clear();
+    }
+    // else if(entry.is_directory())  {
+    //   for (auto&& dir : fs.iterate_directory(entry.filename())) {
+    //   }
+    // }
+  }
+
+  return obj;
 }
 
 // Construct an 'initializer' object that carries our functions
