@@ -14,7 +14,8 @@ function doTest(tst) {
   if(noderc.isFile(tst)) {
 
     // Do file functions...
-    console.log(" \u{2713} Contents of '%s' = \n\n%s\n", tst, noderc.open(tst))
+    // console.log(" \u{2713} Contents of '%s' = \n\n%s\n", tst, noderc.open(tst))
+    console.log(" \u{2713} Entry '%s' is a file.\n", tst)
     return true;
   }
 
@@ -89,4 +90,14 @@ const resG = doTest(tstG);
 const comparisonA = doComparisons("tst.txt", "/tst.txt");
 const comparisonB = doComparisons("include/noderc/version.hpp", "include/noderc/version.hpp");
 
-console.log(noderc.getFileSystemObject());
+// console.log(noderc.getFileSystemObject());
+
+const fs = noderc.getFileSystemObject();
+
+console.log("\n")
+console.log("const fs = noderc.getFileSystemObject();")
+console.log("{")
+console.log("    'VERSION': '%s'",     fs["VERSION"])
+console.log("    'layout.pug': '%s'",  fs["layout.pug"])
+console.log("    'version.hpp': '%s'", fs["version.hpp"])
+console.log("}")

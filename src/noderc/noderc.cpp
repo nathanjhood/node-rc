@@ -42,9 +42,9 @@ namespace addon
  *  @{
  */
 
-bool iterate_filesystem(Napi::Env env, cmrc::embedded_filesystem fs, const std::string &path, Napi::Object obj);
+bool iterate_filesystem(const Napi::Env& env, const cmrc::embedded_filesystem& fs, const std::string &path, const Napi::Object& obj);
 
-bool iterate_filesystem(Napi::Env env, cmrc::embedded_filesystem fs, const std::string &path, Napi::Object obj) {
+bool iterate_filesystem(const Napi::Env& env, const cmrc::embedded_filesystem& fs, const std::string &path, const Napi::Object& obj) {
 
   using bytes = std::vector<char>;
   bool b = false;
@@ -75,7 +75,6 @@ bool iterate_filesystem(Napi::Env env, cmrc::embedded_filesystem fs, const std::
 
       p.clear();
       chunk.clear();
-
     }
 
     else if(entry.is_directory())  {
