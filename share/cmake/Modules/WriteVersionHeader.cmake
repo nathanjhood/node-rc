@@ -12,9 +12,9 @@ macro (write_version_header)
   file(APPEND "${HEADER_FILE}.tmp" "#define ${${PROJECT_NAME}_UPPER}_VERSION_H_\n")
   file(APPEND "${HEADER_FILE}.tmp" "\n")
 
-  file(APPEND "${HEADER_FILE}.tmp" "#define ${${PROJECT_NAME}_UPPER}_VERSION_MAJOR \"${PROJECT_VERSION_MAJOR}\"\n")
-  file(APPEND "${HEADER_FILE}.tmp" "#define ${${PROJECT_NAME}_UPPER}_VERSION_MINOR \"${PROJECT_VERSION_MINOR}\"\n")
-  file(APPEND "${HEADER_FILE}.tmp" "#define ${${PROJECT_NAME}_UPPER}_VERSION_PATCH \"${PROJECT_VERSION_PATCH}\"\n")
+  file(APPEND "${HEADER_FILE}.tmp" "#define ${${PROJECT_NAME}_UPPER}_MAKE_VERSION(major, minor, patch)                              \\\n")
+  file(APPEND "${HEADER_FILE}.tmp" "((major) * 0x1000 + (minor) * 0x100 + (patch))\n")
+  file(APPEND "${HEADER_FILE}.tmp" "\n")
 
   if(DEFINED git_revision)
       file(APPEND "${HEADER_FILE}.tmp" "#define ${${PROJECT_NAME}_UPPER}_VERSION_TWEAK \"${git_revision}\"\n")
