@@ -31,20 +31,44 @@ CMRC_DECLARE(noderc::resources);
 
 namespace noderc
 {
+/** @addtogroup noderc
+ *  @{
+ */
 
 namespace addon
 {
+/** @addtogroup addon
+ *  @{
+ */
 
+/**
+ * @brief
+ *
+ * @param info
+ * @return Napi::Value
+ */
 Napi::Value Hello(const Napi::CallbackInfo& info)
 {
   return Napi::String::New(info.Env(), "noderc is online!");
 }
 
+/**
+ * @brief
+ *
+ * @param info
+ * @return Napi::Value
+ */
 Napi::Value Version(const Napi::CallbackInfo& info)
 {
   return Napi::String::New(info.Env(), NODERC_VERSION);
 }
 
+/**
+ * @brief
+ *
+ * @param args
+ * @return Napi::Value
+ */
 Napi::Value Open(const Napi::CallbackInfo& args)
 {
   Napi::Env env = args.Env();
@@ -107,6 +131,12 @@ Napi::Value Open(const Napi::CallbackInfo& args)
   return out;
 }
 
+/**
+ * @brief
+ *
+ * @param args
+ * @return Napi::Value
+ */
 Napi::Value IsFile(const Napi::CallbackInfo& args)
 {
   Napi::Env env = args.Env();
@@ -130,6 +160,12 @@ Napi::Value IsFile(const Napi::CallbackInfo& args)
   return Napi::Boolean::New(env, fs.is_file(args[0].ToString().Utf8Value()));
 }
 
+/**
+ * @brief
+ *
+ * @param args
+ * @return Napi::Value
+ */
 Napi::Value IsDirectory(const Napi::CallbackInfo& args)
 {
   Napi::Env env = args.Env();
@@ -153,6 +189,12 @@ Napi::Value IsDirectory(const Napi::CallbackInfo& args)
   return Napi::Boolean::New(env, fs.is_directory(args[0].ToString().Utf8Value()));
 }
 
+/**
+ * @brief
+ *
+ * @param args
+ * @return Napi::Value
+ */
 Napi::Value Exists(const Napi::CallbackInfo& args)
 {
   Napi::Env env = args.Env();
@@ -248,6 +290,12 @@ Napi::Value Compare(const Napi::CallbackInfo& args)
   return Napi::Boolean::New(env, true);
 }
 
+/**
+ * @brief 
+ * 
+ * @param args 
+ * @return Napi::Value 
+ */
 Napi::Value CompareSize(const Napi::CallbackInfo& args)
 {
   Napi::Env env = args.Env();
@@ -314,6 +362,12 @@ Napi::Value CompareSize(const Napi::CallbackInfo& args)
   return Napi::Boolean::New(env, true);
 }
 
+/**
+ * @brief 
+ * 
+ * @param args 
+ * @return Napi::Value 
+ */
 Napi::Value CompareContent(const Napi::CallbackInfo& args)
 {
   Napi::Env env = args.Env();
@@ -378,6 +432,12 @@ Napi::Value CompareContent(const Napi::CallbackInfo& args)
   return Napi::Boolean::New(env, true);
 }
 
+/**
+ * @brief
+ *
+ * @param args
+ * @return Napi::Value
+ */
 Napi::Value Object(const Napi::CallbackInfo& args)
 {
   Napi::Env env = args.Env();
@@ -478,10 +538,12 @@ NODE_API_MODULE(noderc, Init) // (name to use, initializer to use)
 // The above attaches the functions exported in 'Init()' to the name used in the fist argument.
 // The C++ functions are then obtainable on the Javascript side under e.g. 'noderc.hello()'
 
+  /// @} group addon
 } // namespace addon
 
 // Here, we can extend the namepsace with Napi overloads, if we need them.
 
+  /// @} group noderc
 } // namespace noderc
 
 #else
