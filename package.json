@@ -11,6 +11,7 @@
     "configure": "cmake-js configure",
     "reconfigure": "cmake-js reconfigure",
     "build": "cmake-js build",
+    "postbuild": "node -p \"const noderc = require('./lib/noderc.node'); console.log(JSON.stringify(noderc.getFileSystemObject(), null, '\\t'));\" > ./lib/noderc.json",
     "build:ts": "tsc",
     "rebuild": "cmake-js rebuild",
     "clean": "cmake-js clean",
