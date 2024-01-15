@@ -50,7 +50,7 @@ interface noderc {
    * returns ```false``` if the ```file``` is not the same size (in bytes) as
    * the compiled resource at ```path```, or if the content of ```file``` (in
    * bytes) does not match the content of the compiled resource at ```path```.
-   * Otherwise, returns true. Also prints to ```STDOUT```.
+   * Otherwise, returns true.
    *
    * Example:
    *
@@ -76,8 +76,7 @@ interface noderc {
   /**
    * Compare a ```file``` on disk to a  compiled resource at ```path```;
    * returns ```false``` if the ```file``` is not the same size (in bytes) as
-   * the compiled resource at ```path```. Otherwise, returns true. Also prints
-   * to ```STDOUT```.
+   * the compiled resource at ```path```. Otherwise, returns true.
    *
    * Example:
    *
@@ -101,8 +100,7 @@ interface noderc {
   /**
    * Compare a ```file``` on disk to a  compiled resource at ```path```;
    * returns ```false``` if the ```file``` is not the same (in byte-to-byte comparison)
-   * as the compiled resource at ```path```. Otherwise, returns true. Also
-   * prints to ```STDOUT```.
+   * as the compiled resource at ```path```. Otherwise, returns true.
    *
    * Example:
    *
@@ -122,6 +120,42 @@ interface noderc {
    * @returns boolean
    */
   compareContent(file: string, path: string): boolean;
+
+  /**
+   * Returns the entire ```cmrc::embedded_filesystem()``` as a Javascript
+   * ```object```.
+   *
+   * ```object``` semantics can be used to access entries in the embedded
+   * filesystem in various ways.
+   *
+   * Example:
+   *
+   * Add ```RESOURCES``` to the list:
+   *
+   * ```.cmake
+   * # CMakeLists.txt
+   *
+   * list (APPEND RESOURCES
+   *   # Resources to compile (add/remove as you please)...
+   *   "favicon.ico"
+   *   "tst.txt"
+   *   "test/views/layout.pug"
+   * )
+   * ```
+   *
+   * Access the ```RESOURCES``` with ```object``` semantics:
+   *
+   * ```.js
+   * // index.js
+   *
+   * const fs = noderc.getFileSystemObject();
+   * console.log(fs["tst.txt"]);
+   *
+   * // etc...
+   * ```
+   * @returns object
+   */
+  getFileSystemObject(): object;
 }
 const noderc: noderc = require('../build/lib/noderc.node');
 export = noderc;
