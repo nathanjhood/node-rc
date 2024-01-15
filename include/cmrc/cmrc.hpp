@@ -52,12 +52,14 @@
  */
 namespace cmrc
 {
+
 /**
  * @brief The ```cmrc::detail``` namespace.
  *
  */
 namespace detail
 {
+
 struct dummy;
 }
 }
@@ -73,6 +75,9 @@ cmrc::embedded_filesystem get_filesystem(); \
 
 namespace cmrc
 {
+/** @addtogroup cmrc
+ *  @{
+ */
 
 /**
  * @brief The ```cmrc::file``` class.
@@ -142,6 +147,9 @@ class directory_entry;
 
 namespace detail
 {
+/** @addtogroup detail
+ *  @{
+ */
 
 class directory;
 class file_data;
@@ -416,7 +424,8 @@ inline std::string normalize_path(std::string path) {
 
 using index_type = std::map<std::string, const cmrc::detail::file_or_directory*>;
 
-} // detail
+  /// @} group detail
+} // namespace detail
 
 /**
  * @brief The ```cmrc::directory_entry``` class.
@@ -591,6 +600,7 @@ public:
   }
 };
 
-}
+  /// @} group cmrc
+} // namespace cmrc
 
 #endif // CMRC_CMRC_HPP_INCLUDED
