@@ -1,6 +1,5 @@
-base64 lib Copyright (C) 2004-2008 René Nyffenegger <rene.nyffenegger@adp-gmbh.ch>
-
-base64 cli Copyright (C) 2023 Nathan J. Hood <nathanjhood@googlemail.com>
+NodeRC Copyright (C) 2024 Nathan J. Hood <nathanjhood@googlemail.com>
+CMakeRC Copyright (c) 2017 vector-of-bool <vectorofbool@gmail.com>
 
 This source code is provided 'as-is', without any express or implied
 warranty. In no event will the author be held liable for any damages
