@@ -41,6 +41,13 @@ namespace noderc
  *  @{
  */
 
+/**
+ * @brief The ```noderc::binding``` namespace.
+ *
+ * These functions consume parts of both the ```Napi``` and ```CMakeRC```
+ * namespaces, but are not exported as Javascript functions.
+ *
+ */
 namespace binding
 {
 
