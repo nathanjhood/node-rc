@@ -196,3 +196,7 @@ bar.txt
 
 package.lock
 yarn.lock
+
+lib/noderc.json
+src/noderc/lib.cpp
+src/noderc/intermediate
