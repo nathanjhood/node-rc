@@ -200,34 +200,19 @@ const trueIfSameBytes = noderc.compareContent("/home/myconfig.cfg", "myconfig.cf
 
 ## ```noderc.getFileSystemObject()```
 
+```.js
+(method) noderc.getFileSystemObject(): object
+```
+
 Returns the entire ```cmrc::embedded_filesystem()``` as a Javascript ```object```.
 
 Javascript ```object``` semantics can then be used to access the entries in the embedded filesystem in various ways.
 
 Example:
 
-Add ```RESOURCES``` to the list:
-
-```.cmake
-# CMakeLists.txt
-
-list (APPEND RESOURCES
-  # Resources to compile (add/remove as you please)...
-  "favicon.ico"
-  "tst.txt"
-  "test/views/layout.pug"
-)
-```
-
-Access the ```RESOURCES``` with Javascript ```object``` semantics:
-
 ```.js
-// index.js
-
 const fs = noderc.getFileSystemObject();
-console.log(fs["tst.txt"]);
-
-// etc...
+const tst_txt = fs["tst.txt"];
 ```
 
 ## Thanks for reading!
