@@ -90,14 +90,6 @@ const resG = doTest(tstG);
 const comparisonA = doComparisons("tst.txt", "/tst.txt");
 const comparisonB = doComparisons("include/noderc/version.hpp", "include/noderc/version.hpp");
 
-// console.log(noderc.getFileSystemObject());
+// const fs = noderc.getFileSystemObject();
 
-const fs = noderc.getFileSystemObject();
-
-console.log("\n")
-console.log("const fs = noderc.getFileSystemObject();")
-console.log("{")
-console.log("    'VERSION': '%s'",     fs["VERSION"])
-console.log("    'layout.pug': '%s'",  fs["layout.pug"])
-console.log("    'version.hpp': '%s'", fs["version.hpp"])
-console.log("}")
+// console.log(JSON.stringify(fs, null, "\n \t"));

@@ -11,12 +11,11 @@
     "configure": "cmake-js configure",
     "reconfigure": "cmake-js reconfigure",
     "build": "cmake-js build",
-    "postbuild": "node -p \"const noderc = require('./lib/noderc.node'); console.log(JSON.stringify(noderc.getFileSystemObject(), null, '\\t'));\" > ./lib/noderc.json",
-    "build:ts": "tsc",
     "rebuild": "cmake-js rebuild",
     "clean": "cmake-js clean",
     "wipe": "cmake-js clean && rm -rvf ./node_modules",
-    "start": "node ./test/index.js"
+    "start": "node ./test/index.js",
+    "noderc:json": "node -p \"const noderc = require('./lib/noderc.node'); console.log(JSON.stringify(noderc.getFileSystemObject(), null, '\\n \\t'));\" > ./lib/noderc.json"
   },
 
   "dependencies": {
