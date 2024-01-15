@@ -145,13 +145,9 @@ interface noderc {
    *
    * Access the ```RESOURCES``` with ```object``` semantics:
    *
-   * ```.js
-   * // index.js
-   *
+   * ```
    * const fs = noderc.getFileSystemObject();
-   * console.log(fs["tst.txt"]);
-   *
-   * // etc...
+   * const tst_txt = fs["tst.txt"];
    * ```
    * @returns object
    */
