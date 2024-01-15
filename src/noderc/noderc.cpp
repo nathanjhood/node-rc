@@ -30,15 +30,21 @@
 // Register our resource library namespace
 CMRC_DECLARE(noderc::resources);
 
+/**
+ * @brief The ```noderc``` namespace.
+ *
+ */
 namespace noderc
 {
+
 /** @addtogroup noderc
  *  @{
  */
 
-namespace addon
+namespace binding
 {
-/** @addtogroup addon
+
+/** @addtogroup binding
  *  @{
  */
 
@@ -79,13 +85,32 @@ bool iterate_filesystem(const Napi::Env& env, const cmrc::embedded_filesystem& f
 
     else if(entry.is_directory())  {
 
-      b = noderc::addon::iterate_filesystem(env, fs, p, obj);
+      b = noderc::binding::iterate_filesystem(env, fs, p, obj);
       p.clear();
     }
   }
 
   return true;
 }
+
+  /// @} group binding
+} // namespace binding
+
+
+/**
+ * @brief The ```noderc::addon``` namespace.
+ *
+ * The functions contained in this namespace are exported as Javascript
+ * functions, and are generally not intended to be called in other C++ code.
+ *
+ * @see ```noderc::addon::Init(Napi::Env env, Napi::Object exports)```
+ *
+ */
+namespace addon
+{
+/** @addtogroup addon
+ *  @{
+ */
 
 /**
  * @brief
@@ -499,8 +524,33 @@ Napi::Value GetFileSystemObject(const Napi::CallbackInfo& args)
 
   auto fs = cmrc::noderc::resources::get_filesystem();
   auto obj = Napi::Object::New(env);
+  const char root[1] = "";
 
-  auto a = noderc::addon::iterate_filesystem(env, fs, "", obj);
+  try {
+
+    auto a = noderc::binding::iterate_filesystem(env, fs, root, obj);
+
+  } catch (const std::system_error& e) {
+
+    // If there was an error...
+    if (e.code() == std::errc::no_such_file_or_directory)
+    {
+      std::string message(e.what());
+      message += '\n';
+      message += "noderc: No such file or directory: ";
+      message += args[0].As<Napi::String>();
+      Napi::TypeError::New(env, message).ThrowAsJavaScriptException();
+      message.clear();
+      return env.Null();
+    }
+
+    std::string message(e.what());
+    message += '\n';
+    message += args[0].As<Napi::String>();
+    Napi::TypeError::New(env, message).ThrowAsJavaScriptException();
+    message.clear();
+    return env.Null();
+  }
 
   return obj;
 }
