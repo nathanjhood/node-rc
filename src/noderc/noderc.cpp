@@ -81,13 +81,13 @@ bool iterate_filesystem(const Napi::Env& env, const cmrc::embedded_filesystem& f
 
       p.clear();
       chunk.clear();
-    }
 
-    else if(entry.is_directory())  {
+    } else if(entry.is_directory())  {
 
       b = noderc::binding::iterate_filesystem(env, fs, p, obj);
       p.clear();
-    }
+
+    } else { return false; }
   }
 
   return true;
