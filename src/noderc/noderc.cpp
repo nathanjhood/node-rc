@@ -12,6 +12,7 @@
 // Required header and C++ flag
 #if __has_include(<napi.h>) && BUILDING_NODE_EXTENSION
 
+// Get project version
 #include "noderc/version.hpp"
 
 // Get standard library dependencies
@@ -59,7 +60,7 @@ namespace binding
 /**
  * @brief Takes the embedded filesystem ```fs``` starting from ```path```, and
  * iterates through it's contents, placing files into the Javascript Object
- * ```object``` (carrying an ```env```) as a key/value pair.
+ * ```obj``` (carrying an ```env```) as a key/value pair.
  *
  * When nested directories are found, the function calls itself recursively to
  * continue drilling downwards through those entries.
@@ -71,9 +72,9 @@ namespace binding
  * @return true
  * @return false
  */
-bool iterate_filesystem(const Napi::Env& env, const cmrc::embedded_filesystem& fs, const std::string &path, const Napi::Object& obj);
+bool iterate_filesystem(const Napi::Env& env, const cmrc::embedded_filesystem& fs, const std::string& path, const Napi::Object& obj);
 
-bool iterate_filesystem(const Napi::Env& env, const cmrc::embedded_filesystem& fs, const std::string &path, const Napi::Object& obj) {
+bool iterate_filesystem(const Napi::Env& env, const cmrc::embedded_filesystem& fs, const std::string& path, const Napi::Object& obj) {
 
   using bytes = std::vector<char>;
   bool b = false;
