@@ -14,6 +14,7 @@
 
 #include "noderc/version.hpp"
 
+// Get standard library dependencies
 #include <algorithm>
 #include <filesystem>
 #include <fstream>
@@ -55,6 +56,21 @@ namespace binding
  *  @{
  */
 
+/**
+ * @brief Takes the embedded filesystem ```fs``` starting from ```path```, and
+ * iterates through it's contents, placing files into the Javascript Object
+ * ```object``` (carrying an ```env```) as a key/value pair.
+ *
+ * When nested directories are found, the function calls itself recursively to
+ * continue drilling downwards through those entries.
+ *
+ * @param env
+ * @param fs
+ * @param path
+ * @param obj
+ * @return true
+ * @return false
+ */
 bool iterate_filesystem(const Napi::Env& env, const cmrc::embedded_filesystem& fs, const std::string &path, const Napi::Object& obj);
 
 bool iterate_filesystem(const Napi::Env& env, const cmrc::embedded_filesystem& fs, const std::string &path, const Napi::Object& obj) {
@@ -120,7 +136,7 @@ namespace addon
  */
 
 /**
- * @brief
+ * @brief Returns a ```Napi::String```, confirming the module is online.
  *
  * @param info
  * @return Napi::Value
@@ -131,7 +147,7 @@ Napi::Value Hello(const Napi::CallbackInfo& info)
 }
 
 /**
- * @brief
+ * @brief Returns a ```Napi::String```, confirming the module version number.
  *
  * @param info
  * @return Napi::Value
@@ -562,7 +578,13 @@ Napi::Value GetFileSystemObject(const Napi::CallbackInfo& args)
   return obj;
 }
 
-// Construct an 'initializer' object that carries our functions
+/**
+ * @brief Construct an 'initializer' object that carries our functions.
+ *
+ * @param env
+ * @param exports
+ * @return Napi::Object
+ */
 Napi::Object Init(Napi::Env env, Napi::Object exports)
 {
   // Export a chosen C++ function under a given Javascript key
