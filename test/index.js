@@ -90,6 +90,6 @@ const resG = doTest(tstG);
 const comparisonA = doComparisons("tst.txt", "/tst.txt");
 const comparisonB = doComparisons("include/noderc/version.hpp", "include/noderc/version.hpp");
 
-// const fs = noderc.getFileSystemObject();
+const fs = noderc.getFileSystemObject();
 
-// console.log(JSON.stringify(fs, null, "\n \t"));
+console.log(JSON.stringify(fs, null, "\n \t"));
