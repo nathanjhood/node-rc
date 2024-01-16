@@ -8,6 +8,7 @@ declare interface noderc {
   compare(file: string, path: string): boolean;
   compareSize(file: string, path: string): boolean;
   compareContent(file: string, path: string): boolean;
+  getFileSystemObject(): object;
 }
 declare const noderc: noderc;
 export = noderc;
