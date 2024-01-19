@@ -45,6 +45,24 @@ list (APPEND RESOURCES
 )
 
 #[===========================================================================[
+  Required definitions
+]===========================================================================]#
+# Make sure both Napi and CMakeRC use the same exception specifications...
+if (DEFINED NAPI_CPP_EXCEPTIONS AND DEFINED CMRC_NO_EXCEPTIONS)
+  message (STATUS "ERROR: Both 'NAPI_CPP_EXCEPTIONS' and 'CMRC_NO_EXCEPTIONS' are defined?")
+  return ()
+endif ()
+if (DEFINED NAPI_DISABLE_CPP_EXCEPTIONS)
+  add_definitions (CMRC_NO_EXCEPTIONS)
+elseif (DEFINED NAPI_CPP_EXCEPTIONS)
+  remove_definitions (CMRC_NO_EXCEPTIONS)
+endif ()
+if (DEFINED CMRC_NO_EXCEPTIONS)
+  add_definitions (NAPI_DISABLE_CPP_EXCEPTIONS)
+  remove_definitions (NAPI_CPP_EXCEPTIONS)
+endif ()
+
+#[===========================================================================[
   Resources to compile
 ]===========================================================================]#
 # Compile some resources to binary
