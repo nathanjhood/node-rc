@@ -8,8 +8,8 @@ macro (write_version_header)
   file(APPEND "${HEADER_FILE}.tmp" "// Version control info\n")
   file(APPEND "${HEADER_FILE}.tmp" "\n")
 
-  file(APPEND "${HEADER_FILE}.tmp" "#ifndef ${${PROJECT_NAME}_UPPER}_VERSION_H_\n")
-  file(APPEND "${HEADER_FILE}.tmp" "#define ${${PROJECT_NAME}_UPPER}_VERSION_H_\n")
+  file(APPEND "${HEADER_FILE}.tmp" "#ifndef ${${PROJECT_NAME}_UPPER}_VERSION_HPP_\n")
+  file(APPEND "${HEADER_FILE}.tmp" "#define ${${PROJECT_NAME}_UPPER}_VERSION_HPP_\n")
   file(APPEND "${HEADER_FILE}.tmp" "\n")
 
   file(APPEND "${HEADER_FILE}.tmp" "#define ${${PROJECT_NAME}_UPPER}_MAKE_VERSION(major, minor, patch)                              \\\n")
@@ -35,7 +35,7 @@ macro (write_version_header)
   endif()
 
   file(APPEND "${HEADER_FILE}.tmp" "\n")
-  file(APPEND "${HEADER_FILE}.tmp" "#endif // ${${PROJECT_NAME}_UPPER}_VERSION_H_\n")
+  file(APPEND "${HEADER_FILE}.tmp" "#endif // ${${PROJECT_NAME}_UPPER}_VERSION_HPP_\n")
   file(APPEND "${HEADER_FILE}.tmp" "\n")
 
   #Copy the file only if it has changed.
