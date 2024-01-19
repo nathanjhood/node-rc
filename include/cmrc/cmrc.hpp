@@ -42,8 +42,11 @@
 #include <system_error>
 #include <type_traits>
 
-#if !(defined(__EXCEPTIONS) || defined(__cpp_exceptions) || defined(_CPPUNWIND) || defined(CMRC_NO_EXCEPTIONS))
-#define CMRC_NO_EXCEPTIONS 1
+#if !(defined(__EXCEPTIONS) \
+  || defined(__cpp_exceptions) \
+  || defined(_CPPUNWIND) \
+  || defined(CMRC_NO_EXCEPTIONS))
+ #define CMRC_NO_EXCEPTIONS 1
 #endif
 
 /**
@@ -61,17 +64,25 @@ namespace detail
 {
 
 struct dummy;
-}
-}
+
+} // namespace detail
+
+} // namespace cmrc
 
 #define CMRC_DECLARE(libid) \
-namespace cmrc { namespace detail { \
+namespace cmrc { \
+namespace detail { \
 struct dummy; \
-static_assert(std::is_same<dummy, ::cmrc::detail::dummy>::value, "CMRC_DECLARE() must only appear at the global namespace"); \
-} } \
-namespace cmrc { namespace libid { \
+static_assert(std::is_same<dummy, ::cmrc::detail::dummy>::value, \
+"CMRC_DECLARE() must only appear at the global namespace"); \
+} \
+} \
+namespace cmrc { \
+namespace libid { \
 cmrc::embedded_filesystem get_filesystem(); \
-} } static_assert(true, "")
+} \
+} \
+static_assert(true, "")
 
 namespace cmrc
 {
@@ -85,10 +96,8 @@ namespace cmrc
  * @link https://github.com/vector-of-bool/cmrc?tab=readme-ov-file#members-of-cmrcfile
  *
  */
-class file {
-  const char* _begin = nullptr;
-  const char* _end = nullptr;
-
+class file
+{
 public:
   using iterator = const char*;
   using const_iterator = iterator;
@@ -126,7 +135,10 @@ public:
    *
    * @return ```std::size_t```
    */
-  std::size_t size() const { return static_cast<std::size_t>(std::distance(begin(), end())); }
+  std::size_t size() const
+  {
+    return static_cast<std::size_t>(std::distance(begin(), end()));
+  }
 
   /**
    * @brief Default constructor, refers to no resource.
@@ -140,7 +152,14 @@ public:
    * @param beg
    * @param end
    */
-  file(iterator beg, iterator end) noexcept : _begin(beg), _end(end) {}
+  file(iterator beg, iterator end) noexcept
+   : _begin(beg)
+   , _end(end)
+  {}
+
+private:
+  const char* _begin = nullptr;
+  const char* _end = nullptr;
 };
 
 class directory_entry;
@@ -158,23 +177,16 @@ class file_data;
  * @brief The ```cmrc::detail::file_or_directory``` class.
  *
  */
-class file_or_directory {
-
-  union _data_t {
-    class file_data* file_data;
-    class directory* directory;
-  } _data;
-
-  bool _is_file = true;
-
+class file_or_directory
+{
 public:
-
   /**
    * @brief Construct a new ```cmrc::detail::file_or_directory``` object.
    *
    * @param f
    */
-  explicit file_or_directory(file_data& f) {
+  explicit file_or_directory(file_data& f)
+  {
     _data.file_data = &f;
   }
 
@@ -183,7 +195,8 @@ public:
    *
    * @param d
    */
-  explicit file_or_directory(directory& d) {
+  explicit file_or_directory(directory& d)
+  {
     _data.directory = &d;
     _is_file = false;
   }
@@ -194,7 +207,8 @@ public:
    * @return ```true```
    * @return ```false```
    */
-  bool is_file() const noexcept {
+  bool is_file() const noexcept
+  {
     return _is_file;
   }
 
@@ -204,7 +218,8 @@ public:
    * @return ```true```
    * @return ```false```
    */
-  bool is_directory() const noexcept {
+  bool is_directory() const noexcept
+  {
     return !is_file();
   }
 
@@ -213,7 +228,8 @@ public:
    *
    * @return ```const cmrc::detail::directory&```
    */
-  const directory& as_directory() const noexcept {
+  const directory& as_directory() const noexcept
+  {
     assert(!is_file());
     return *_data.directory;
   }
@@ -223,17 +239,29 @@ public:
    *
    * @return ```const cmrc::detail::file_data&```
    */
-  const file_data& as_file() const noexcept {
+  const file_data& as_file() const noexcept
+  {
     assert(is_file());
     return *_data.file_data;
   }
+
+private:
+
+  union _data_t
+  {
+    class file_data* file_data;
+    class directory* directory;
+  } _data;
+
+  bool _is_file = true;
 };
 
 /**
  * @brief the ```cmrc::detail::file_data``` class.
  *
  */
-class file_data {
+class file_data
+{
 public:
   const char* begin_ptr;
   const char* end_ptr;
@@ -250,7 +278,11 @@ public:
    * @param b
    * @param e
    */
-  file_data(const char* b, const char* e) : begin_ptr(b), end_ptr(e) {}
+  file_data(const char* b, const char* e)
+   : begin_ptr(b)
+   , end_ptr(e)
+  {}
+
 };
 
 /**
@@ -259,8 +291,8 @@ public:
  * @param path
  * @return ```std::pair<std::string, std::string>```
  */
-inline std::pair<std::string, std::string> split_path(const std::string& path) {
-
+inline std::pair<std::string, std::string> split_path(const std::string& path)
+{
   auto first_sep = path.find("/");
 
   if (first_sep == path.npos) {
@@ -270,7 +302,8 @@ inline std::pair<std::string, std::string> split_path(const std::string& path) {
   }
 }
 
-struct created_subdirectory {
+struct created_subdirectory
+{
   class directory& directory;
   class file_or_directory& index_entry;
 };
@@ -279,8 +312,9 @@ struct created_subdirectory {
  * @brief The ```cmrc::detail::directory``` class.
  *
  */
-class directory {
-
+class directory
+{
+private:
   std::list<file_data> _files;
   std::list<directory> _dirs;
   std::map<std::string, file_or_directory> _index;
@@ -307,7 +341,8 @@ public:
    * @param name
    * @return ```cmrc::detail::created_subdirectory```
    */
-  created_subdirectory add_subdir(std::string name) & {
+  created_subdirectory add_subdir(std::string name) &
+  {
     _dirs.emplace_back();
     auto& back = _dirs.back();
     auto& fod = _index.emplace(name, file_or_directory{back}).first->second;
@@ -322,7 +357,8 @@ public:
    * @param end
    * @return ```cmrc::detail::file_or_directory*```
    */
-  file_or_directory* add_file(std::string name, const char* begin, const char* end) & {
+  file_or_directory* add_file(std::string name, const char* begin, const char* end) &
+  {
     assert(_index.find(name) == _index.end());
     _files.emplace_back(begin, end);
     return &_index.emplace(name, file_or_directory{_files.back()}).first->second;
@@ -334,7 +370,8 @@ public:
    * @param path
    * @return ```const cmrc::detail::file_or_directory*```
    */
-  const file_or_directory* get(const std::string& path) const {
+  const file_or_directory* get(const std::string& path) const
+  {
     auto pair = split_path(path);
     auto child = _index.find(pair.first);
     if (child == _index.end()) {
@@ -354,7 +391,15 @@ public:
     return entry.as_directory().get(pair.second);
   }
 
-  class iterator {
+  /**
+   * @brief The ```directory::iterator``` class.
+   *
+   * @link https://github.com/vector-of-bool/cmrc?tab=readme-ov-file#members-of-cmrcdirectory_iterator
+   *
+   */
+  class iterator
+  {
+  private:
     base_iterator _base_iter;
     base_iterator _end_iter;
   public:
@@ -364,33 +409,93 @@ public:
     using reference = const value_type&;
     using iterator_category = std::input_iterator_tag;
 
+    /**
+     * @brief Default-construct a new ```iterator``` object.
+     *
+     */
     iterator() = default;
-    explicit iterator(base_iterator iter, base_iterator end) : _base_iter(iter), _end_iter(end) {}
 
-    iterator begin() const noexcept {
+    /**
+     * @brief Initialize-construct a new ```iterator``` object.
+     *
+     * @param iter
+     * @param end
+     */
+    explicit iterator(base_iterator iter, base_iterator end)
+     : _base_iter(iter)
+     , _end_iter(end)
+    {}
+
+    /**
+     * @brief Returns ```*this```.
+     *
+     * @return iterator
+     */
+    iterator begin() const noexcept
+    {
       return *this;
     }
 
-    iterator end() const noexcept {
+    /**
+     * @brief Returns a past-the-end iterator corresponding to this iterator.
+     *
+     * @return iterator
+     */
+    iterator end() const noexcept
+    {
       return iterator(_end_iter, _end_iter);
     }
 
+    /**
+     * @brief Returns the ```directory_entry``` for which the iterator
+     * corresponds.
+     *
+     * @return value_type
+     */
     inline value_type operator*() const noexcept;
 
-    bool operator==(const iterator& rhs) const noexcept {
+    /**
+     * @brief Implement iterator semantics.
+     *
+     * @param rhs
+     * @return true
+     * @return false
+     */
+    bool operator==(const iterator& rhs) const noexcept
+    {
       return _base_iter == rhs._base_iter;
     }
 
-    bool operator!=(const iterator& rhs) const noexcept {
+    /**
+     * @brief Implement iterator semantics.
+     *
+     * @param rhs
+     * @return true
+     * @return false
+     */
+    bool operator!=(const iterator& rhs) const noexcept
+    {
       return !(*this == rhs);
     }
 
-    iterator& operator++() noexcept {
+    /**
+     * @brief Implement iterator semantics.
+     *
+     * @return iterator&
+     */
+    iterator& operator++() noexcept
+    {
       ++_base_iter;
       return *this;
     }
 
-    iterator operator++(int) noexcept {
+    /**
+     * @brief Implement iterator semantics.
+     *
+     * @return iterator
+     */
+    iterator operator++(int) noexcept
+    {
       auto cp = *this;
       ++_base_iter;
       return cp;
@@ -399,16 +504,35 @@ public:
 
   using const_iterator = iterator;
 
-  iterator begin() const noexcept {
+  /**
+   * @brief
+   *
+   * @return iterator
+   */
+  iterator begin() const noexcept
+  {
     return iterator(_index.begin(), _index.end());
   }
 
-  iterator end() const noexcept {
+  /**
+   * @brief
+   *
+   * @return iterator
+   */
+  iterator end() const noexcept
+  {
     return iterator();
   }
 };
 
-inline std::string normalize_path(std::string path) {
+/**
+ * @brief
+ *
+ * @param path
+ * @return std::string
+ */
+inline std::string normalize_path(std::string path)
+{
   while (path.find("/") == 0) {
     path.erase(path.begin());
   }
@@ -431,10 +555,8 @@ using index_type = std::map<std::string, const cmrc::detail::file_or_directory*>
  * @brief The ```cmrc::directory_entry``` class.
  *
  */
-class directory_entry {
-  std::string _fname;
-  const detail::file_or_directory* _item;
-
+class directory_entry
+{
 public:
   /**
    * @brief Default-construct a new ```cmrc::directory_entry``` object.
@@ -458,7 +580,8 @@ public:
    *
    * @return ```const std::string&```
    */
-  const std::string& filename() const & {
+  const std::string& filename() const &
+  {
     return _fname;
   }
 
@@ -467,29 +590,38 @@ public:
    *
    * @return ```std::string```
    */
-  std::string filename() const && {
+  std::string filename() const &&
+  {
     return std::move(_fname);
   }
 
   /**
-   * @brief Returns ```true``` is the entry is a file; else, returns ```false```.
+   * @brief Returns ```true``` is the entry is a file; else, returns
+   * ```false```.
    *
    * @return ```true```
    * @return ```false```
    */
-  bool is_file() const {
+  bool is_file() const
+  {
     return _item->is_file();
   }
 
   /**
-   * @brief Returns ```true``` is the entry is a directory; else, returns ```false```.
+   * @brief Returns ```true``` is the entry is a directory; else, returns
+   * ```false```.
    *
    * @return ```true ```
    * @return ```false```
    */
-  bool is_directory() const {
+  bool is_directory() const
+  {
     return _item->is_directory();
   }
+
+private:
+  std::string _fname;
+  const detail::file_or_directory* _item;
 };
 
 directory_entry detail::directory::iterator::operator*() const noexcept {
@@ -499,10 +631,19 @@ directory_entry detail::directory::iterator::operator*() const noexcept {
 
 using directory_iterator = detail::directory::iterator;
 
-class embedded_filesystem {
+/**
+ * @brief The ```embedded_filesystem``` class.
+ *
+ * @link https://github.com/vector-of-bool/cmrc?tab=readme-ov-file#methods-on-cmrcembedded_filesystem
+ *
+ */
+class embedded_filesystem
+{
   // Never-null:
   const cmrc::detail::index_type* _index;
-  const detail::file_or_directory* _get(std::string path) const {
+
+  const detail::file_or_directory* _get(std::string path) const
+  {
     path = detail::normalize_path(path);
     auto found = _index->find(path);
     if (found == _index->end()) {
@@ -513,17 +654,25 @@ class embedded_filesystem {
   }
 
 public:
+
+  /**
+   * @brief Construct a new ```embedded_filesystem``` object.
+   *
+   * @param index
+   */
   explicit embedded_filesystem(const detail::index_type& index)
     : _index(&index)
   {}
 
   /**
-   * @brief
+   * @brief Opens and returns a non-directory ```file``` object at ```path```,
+   * or throws ```std::system_error()``` on error.
    *
    * @param path
    * @return ```cmrc::file```
    */
-  file open(const std::string& path) const {
+  file open(const std::string& path) const
+  {
     auto entry_ptr = _get(path);
     if (!entry_ptr || !entry_ptr->is_file()) {
 #ifdef CMRC_NO_EXCEPTIONS
@@ -538,47 +687,55 @@ public:
   }
 
   /**
-   * @brief
+   * @brief Returns ```true``` if the given ```path``` names a regular file,
+   * ```false``` otherwise.
    *
    * @param path
    * @return ```true```
    * @return ```false```
    */
-  bool is_file(const std::string& path) const noexcept {
+  bool is_file(const std::string& path) const noexcept
+  {
     auto entry_ptr = _get(path);
     return entry_ptr && entry_ptr->is_file();
   }
 
   /**
-   * @brief
+   * @brief Returns ```true``` if the given ```path``` names a directory,
+   * ```false``` otherwise.
    *
    * @param path
    * @return ```true```
    * @return ```false```
    */
-  bool is_directory(const std::string& path) const noexcept {
+  bool is_directory(const std::string& path) const noexcept
+  {
     auto entry_ptr = _get(path);
     return entry_ptr && entry_ptr->is_directory();
   }
 
   /**
-   * @brief
+   * @brief Returns ```true``` if the given ```path``` names an existing file
+   * or directory, ```false``` otherwise.
    *
    * @param path
    * @return ```true```
    * @return ```false```
    */
-  bool exists(const std::string& path) const noexcept {
+  bool exists(const std::string& path) const noexcept
+  {
     return !!_get(path);
   }
 
   /**
-   * @brief
+   * @brief Returns a ```directory_iterator``` for iterating the contents of a
+   * directory. Throws if the given ```path``` does not identify a directory.
    *
    * @param path
    * @return ```cmrc::directory_iterator```
    */
-  directory_iterator iterate_directory(const std::string& path) const {
+  directory_iterator iterate_directory(const std::string& path) const
+  {
     auto entry_ptr = _get(path);
     if (!entry_ptr) {
 #ifdef CMRC_NO_EXCEPTIONS
@@ -604,3 +761,4 @@ public:
 } // namespace cmrc
 
 #endif // CMRC_CMRC_HPP_INCLUDED
+
