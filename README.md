@@ -225,3 +225,5 @@ const tst_txt = fs["tst.txt"];
 - [CMakeRC Blog article](https://vector-of-bool.github.io/2017/01/21/cmrc.html)
 - [Node-API Resource](https://nodejs.github.io/node-addon-examples/)
 - [Node Addon API documentation](https://github.com/nodejs/node-addon-api#api-documentation)
+
+Please note that the version of CMakeRC in the project root has been slightly enhanced for intellisense and to ensure a consistent C++ exceptions policy is used throughout the codebase. These changes may be reverted in a future update.
