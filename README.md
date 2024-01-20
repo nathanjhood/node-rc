@@ -35,7 +35,7 @@ To build your own custom resource library and use it in your own NodeJs projects
 }
 ```
 - customize the ```RESOURCES``` to be compiled in ```CMakeLists.txt``` - they also need to be under version control - and push your changes to your fork
-- run ```npm run install``` or ```yarn``` in your new NodeJs project to acquire and build your library
+- run ```npm run install``` or ```yarn install``` in your new NodeJs project to acquire and build your library
 - your library will be available in your new NodeJs project by requiring/importing:
 
 ```.js
