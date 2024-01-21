@@ -1,0 +1,75 @@
+## Hacking
+
+- Trying to build the NodeJs addon manually?
+
+When building this project from the npm/yarn command, the package 'cmake-js' is
+invoked, which then reads from the same build script ("CMakeLists.txt") as the
+CMake CLI does in a typical build scenario. However, "cmake-js" also passes an
+argument to the compiler equivalent to passing
+"-DCMAKE_CXX_FLAGS:STRING=-DBUILDING_NODE_EXTENSION" on the command line. You
+may also pass the above arg manually when building with CMake directly on the
+command line, as long as you have already done 'npm install' or 'yarn install'
+to acquire these headers; they should be found in the usual "node_modules"
+folder at the project root.
+
+You will also need to install the "cmake-js" package globally in order to
+acquire necessary NodeJS development files; just run "npm -g install cmake-js"
+or "yarn global add cmake-js" before building.
+
+Note that the entire content of 'noderc.cpp' is guarded by requiring "napi.h"
+to be found and "BUILDING_NODE_EXTENSION" to be defined.
+
+See the next section if you can't find "napi.h".
+
+- "Where is 'napi.h'?"
+
+When building the NodeJS addon, your IDE might not find the "<napi.h>" file,
+even when building successfully. The file(s) you need should be in the
+"node_modules" directory, under "node-api-headers/include" (C headers for
+NodeJs) and "node-addon-api" (C++ headers which wrap the C headers)*. The build
+script(s) will pick them up automatically, but your IDE might not. You just need
+to add these two directories appropriately to your IDE's intellisense engine
+path.
+
+VSCode with C++ extension example:
+
+// .vscode/c_cpp_properties.json
+{
+  "configurations": [
+    {
+      "name": "Linux",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "node_modules/node-addon-api",
+        "node_modules/node-api-headers/include"
+      ],
+      "defines": [],
+      "compilerPath": "/usr/bin/g++",
+      "cStandard": "c17",
+      "cppStandard": "c++14",
+      "intelliSenseMode": "linux-gcc-x64",
+      "configurationProvider": "ms-vscode.cmake-tools"
+    }
+  ],
+  "version": 4
+}
+
+
+*Important distinction: "<napi.h>" is the C++ addon header, and is ABI-stable.
+
+- Node versions, nvm, and ABI stability
+
+If you are using nvm (node version manager), or have different Node
+installations on your system, Node addons written using the "Node API" C headers
+will complain that the Node version used during build is different to the one
+attempting to run the built module.
+
+The "Node Addon API" C++  header provides an ABI stability promise, which
+circumvents this issue.
+
+When choosing to build an addon using the "Node API" C headers directly, you
+must build against the same Node version that you intend to run on.
+
+With this in mind, 'noderc' is written using "Node Addon API" in C++; you should
+not experience any issues with differing Node versions and nvm when building
+this project, thanks to the "Node Addon API"'s' ABI stability promise.
