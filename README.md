@@ -226,4 +226,4 @@ const tst_txt = fs["tst.txt"];
 - [Node-API Resource](https://nodejs.github.io/node-addon-examples/)
 - [Node Addon API documentation](https://github.com/nodejs/node-addon-api#api-documentation)
 
-Please note that the version of CMakeRC in the project root has been slightly enhanced for intellisense and to ensure a consistent C++ exceptions policy is used throughout the codebase. These changes may be reverted in a future update.
+Please note that the version of CMakeRC in the project root has been slightly enhanced to intellisense, and to ensure a consistent C++ exceptions policy is used throughout the codebase. These changes may be reverted in a future update which intends to incorporate throwing CMakeRC's exceptions as a ```Napi::Exception``` to the Javascript side.
