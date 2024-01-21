@@ -208,9 +208,16 @@ Returns the entire ```cmrc::embedded_filesystem()``` as a Javascript ```object``
 
 Javascript ```object``` semantics can then be used to access the entries in the embedded filesystem in various ways.
 
-Example:
+Examples:
 
 ```.js
+// Cast the entire embedded filesystem object to JSON for inspection
+const fs_to_json = JSON.stringify(noderc.getFileSystemObject(), null, "\n \t")
+console.log(fs_to_json)
+```
+
+```.js
+// Cast a single embedded filesystem entry to a Javascript object
 const fs = noderc.getFileSystemObject();
 const tst_txt = fs["tst.txt"];
 ```
