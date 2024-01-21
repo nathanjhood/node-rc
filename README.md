@@ -2,6 +2,18 @@
 
 CMakeRC as a NodeJs C++ Addon.
 
+Serve a binary-compiled embedded filesystem as a Javascript object in NodeJS.
+
+```.js
+import noderc from '@nathanjhood/noderc';
+
+const fs = noderc.getFileSystemObject();
+
+const tst_txt = fs["tst.txt"];
+
+console.log(JSON.stringify(fs, null, "\n \t"));
+```
+
 ## Content
 
 - [Usage](https://github.com/nathanjhood/noderc#usage)
