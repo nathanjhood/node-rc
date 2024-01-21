@@ -8,9 +8,7 @@ Serve a binary-compiled embedded filesystem as a Javascript object in NodeJS.
 import noderc from '@nathanjhood/noderc';
 
 const fs = noderc.getFileSystemObject();
-
-const tst_txt = fs["tst.txt"];
-
+const favicon_ico = fs["favicon.ico"];
 console.log(JSON.stringify(fs, null, "\n \t"));
 ```
 
