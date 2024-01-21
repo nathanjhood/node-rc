@@ -2,6 +2,23 @@
 
 CMakeRC as a NodeJs C++ Addon.
 
+## Content
+
+- [Usage](https://github.com/nathanjhood/noderc#usage)
+  - [Build your own](https://github.com/nathanjhood/noderc#build-your-own)
+  - [Requirements](https://github.com/nathanjhood/noderc#requirements)
+- [Hacking](https://github.com/nathanjhood/noderc#hacking)
+- [Docs](https://github.com/nathanjhood/noderc#usage)
+  - [```noderc.open()```](https://github.com/nathanjhood/noderc#nodercopen)
+  - [```noderc.isFile()```](https://github.com/nathanjhood/noderc#nodercisfile)
+  - [```noderc.isDirectory()```](https://github.com/nathanjhood/noderc#nodercisdirectory)
+  - [```noderc.exists()```](https://github.com/nathanjhood/noderc#nodercexists)
+  - [```noderc.compare()```](https://github.com/nathanjhood/noderc#noderccompare)
+  - [```noderc.compareSize()```](https://github.com/nathanjhood/noderc#noderccomparesize)
+  - [```noderc.compareContent()```](https://github.com/nathanjhood/noderc#noderccomparecontent)
+  - [```noderc.getFileSystemObject()```](https://github.com/nathanjhood/noderc#noderccompare)
+- [Acknowledgments](https://github.com/nathanjhood/noderc#acknowledgments)
+
 ## Usage
 
 To see how to serve binary-compiled resources as Javascript objects, follow these steps:
