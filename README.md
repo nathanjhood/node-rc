@@ -28,7 +28,8 @@ list (APPEND RESOURCES
 To build your own custom resource library and use it in your own NodeJs projects:
 
 - fork this repo
-- customize the [```RESOURCES``` to be compiled in ```CMakeLists.txt```](https://github.com/nathanjhood/noderc/blob/main/CMakeLists.txt#L29C11-L29C25) - they also need to be under version control - and push your changes to your fork
+- customize the [```RESOURCES``` to be compiled in ```CMakeLists.txt```](https://github.com/nathanjhood/noderc/blob/main/CMakeLists.txt#L29C11-L29C25) - they also need to be under version control
+- push your changes to your fork
 - add the URL of your fork to the ```package.json``` dependencies of the NodeJs project which will consume your library
 ```.json
 "dependencies": {
