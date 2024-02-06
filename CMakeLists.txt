@@ -9,7 +9,7 @@ set (CMAKE_MODULE_PATH
 #[===========================================================================[
   Project setup
 ]===========================================================================]#
-project (noderc VERSION 1.0.0.0)
+project (noderc VERSION 1.0.0)
 
 # Use git to update version information
 include (WriteVersionFile)
@@ -27,7 +27,6 @@ if (NOT DEFINED RESOURCES)
   set (RESOURCES)
 
   list (APPEND RESOURCES
-
     # Resources to compile (add/remove as you please)...
     favicon.ico
     tst.txt
@@ -67,7 +66,7 @@ endif ()
 ]===========================================================================]#
 # Compile some resources to binary
 include(CMakeRC)
-message (STATUS "Configuring noderc::resources")
+message (STATUS "Configuring ${PROJECT_NAME}::resources")
 if (NOT ${PROJECT_SOURCE_DIR} EQUAL ${PROJECT_BINARY_DIR})
   # Just for intellisense...
   configure_file ("include/cmrc/cmrc.hpp" "include/cmrc/cmrc.hpp")
@@ -100,7 +99,7 @@ if (-DBUILDING_NODE_EXTENSION IN_LIST CMAKE_CXX_FLAGS)
   include (GetNodeAPIHeaders)
   # Include Node-API wrappers
   include (GetNodeAPIWrappers)
-  message (STATUS "Configuring noderc::noderc")
+  message (STATUS "Configuring ${PROJECT_NAME}::${PROJECT_NAME}")
   # Create a Node C++ Addon as a dynamic library
   add_library (${PROJECT_NAME} SHARED)
   add_library (${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
