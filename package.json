@@ -20,7 +20,7 @@
 
   "dependencies": {
     "clang-format": "^1.8.0",
-    "cmake-js": "^7.2.1",
+    "cmake-js": "https://github.com/nathanjhood/cmake-js#cmakejs_cmake_api",
     "node-addon-api": "^7.0.0",
     "node-api-headers": "^1.1.0"
   },
