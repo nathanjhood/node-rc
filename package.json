@@ -1,30 +1,32 @@
 {
   "name": "@nathanjhood/node-rc",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "repository": "https://github.com/nathanjhood/node-rc.git",
   "author": "Nathan J. Hood <nathanjhood@googlemail.com>",
   "license": "MIT",
   "scripts": {
-    "preinstall": "cmake-js install",
-    "postinstall": "cmake-js compile",
-    "configure": "cmake-js configure",
-    "reconfigure": "cmake-js reconfigure",
-    "build": "cmake-js build",
-    "rebuild": "cmake-js rebuild",
-    "clean": "cmake-js clean",
-    "wipe": "cmake-js clean && rm -rvf ./node_modules",
-    "start": "node ./test/index.js",
+    "start":        "node ./index.js",
+    "install":      "cmake-js install",
+    "postinstall":  "cmake-js compile     --CDBUILD_TESTS:BOOL=TRUE --CDCMAKE_INSTALL_PREFIX:PATH=./dist",
+    "configure":    "cmake-js configure   --CDBUILD_TESTS:BOOL=TRUE --CDCMAKE_INSTALL_PREFIX:PATH=./dist",
+    "reconfigure":  "cmake-js reconfigure --CDBUILD_TESTS:BOOL=TRUE --CDCMAKE_INSTALL_PREFIX:PATH=./dist",
+    "build":        "cmake-js build",
+    "rebuild":      "cmake-js rebuild",
+    "clean":        "cmake-js clean",
+    "wipe":         "cmake-js clean && rm -rvf ./node_modules",
+
+    "ctest":        "ctest --test-dir ./build --rerun-failed --output-on-failure --verbose",
+    "cpack":        "cpack --config   ./build/CPackSourceConfig.cmake -B ./dist",
+    "cdist":        "cpack --config   ./build/CPackConfig.cmake       -B ./dist",
+
     "noderc:json": "node -p \"const noderc = require('./lib/noderc.node'); console.log(JSON.stringify(noderc.getFileSystemObject(), null, '\\n \\t'));\" > ./lib/noderc.json"
   },
-
   "dependencies": {
     "clang-format": "^1.8.0",
     "cmake-js": "https://github.com/nathanjhood/cmake-js#cmakejs_cmake_api",
-    "node-addon-api": "^7.0.0",
-    "node-api-headers": "^1.1.0"
+    "node-addon-api": "^7.1.0"
   },
-
   "devDependencies": {
     "@types/node": "^20.10.6",
     "typescript": "^5.3.3"
