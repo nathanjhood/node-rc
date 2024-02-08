@@ -1,89 +1,44 @@
-cmake_minimum_required (VERSION 3.15...3.28 FATAL_ERROR)
+cmake_minimum_required (VERSION 3.15)
 
-set (CMAKE_MODULE_PATH
-  "${CMAKE_CURRENT_LIST_DIR}"
+list (APPEND CMAKE_MODULE_PATH
+  "${CMAKE_CURRENT_LIST_DIR}/node_modules/cmake-js/share/cmake"
   "${CMAKE_CURRENT_LIST_DIR}/share/cmake/Modules"
-  "${CMAKE_MODULE_PATH}"
+  "${CMAKE_CURRENT_LIST_DIR}"
 )
 
 #[===========================================================================[
   Project setup
 ]===========================================================================]#
-project (noderc VERSION 1.0.0.0)
 
-# Use git to update version information
-include (WriteVersionFile)
-write_version_file ()
-include (WriteVersionHeader)
-write_version_header ()
-configure_file ("include/${PROJECT_NAME}/version.hpp" "include/${PROJECT_NAME}/version.hpp")
+project (NodeRC VERSION 1.0.1)
 
 # Start a list of targets to be built
 set (TARGETS)
 
-if (NOT DEFINED RESOURCES)
+# Start a list of resources to compile and serve as Javascript objects
+set (RESOURCES)
 
-  # Start a list of resources to compile and serve as Javascript objects
-  set (RESOURCES)
-
-  list (APPEND RESOURCES
-
-    # Resources to compile (add/remove as you please)...
-    favicon.ico
-    tst.txt
-    test/views/layout.pug # note that the path prefix was used here...
-  )
-
-endif ()
-
-# We can append as many resources as we wish, or even start a second
-# library list if need be... the below file is not required; just
-# useful for tests and demonstration purposes.
 list (APPEND RESOURCES
-  # try using the 'compare()' function on this file/path!
-  include/${PROJECT_NAME}/version.hpp
+  # Resources to compile (add/remove as you please)...
+  favicon.ico
+  tst.txt
+  test/views/layout.pug # note that the path prefix was used here...
 )
 
-#[===========================================================================[
-  Required definitions
-]===========================================================================]#
-# Make sure both Napi and CMakeRC use the same exception specifications...
-if (DEFINED NAPI_CPP_EXCEPTIONS AND DEFINED CMRC_NO_EXCEPTIONS)
-  message (STATUS "ERROR: Both 'NAPI_CPP_EXCEPTIONS' and 'CMRC_NO_EXCEPTIONS' are defined?")
-  return ()
-endif ()
-if (DEFINED NAPI_DISABLE_CPP_EXCEPTIONS)
-  add_definitions (CMRC_NO_EXCEPTIONS)
-elseif (DEFINED NAPI_CPP_EXCEPTIONS)
-  remove_definitions (CMRC_NO_EXCEPTIONS)
-endif ()
-if (DEFINED CMRC_NO_EXCEPTIONS)
-  add_definitions (NAPI_DISABLE_CPP_EXCEPTIONS)
-  remove_definitions (NAPI_CPP_EXCEPTIONS)
-endif ()
+include (CMakeRC)
 
-#[===========================================================================[
-  Resources to compile
-]===========================================================================]#
-# Compile some resources to binary
-include(CMakeRC)
-message (STATUS "Configuring noderc::resources")
-if (NOT ${PROJECT_SOURCE_DIR} EQUAL ${PROJECT_BINARY_DIR})
-  # Just for intellisense...
-  configure_file ("include/cmrc/cmrc.hpp" "include/cmrc/cmrc.hpp")
-endif ()
 # Create a CMakeRC library
 # See https://github.com/vector-of-bool/cmrc/blob/master/README.md#usage
 cmrc_add_resource_library(resources
-	ALIAS ${PROJECT_NAME}::resources
-	NAMESPACE ${PROJECT_NAME}::resources
+	ALIAS NodeRC::resources
+	NAMESPACE NodeRC::resources
   # Resources to compile...
   ${RESOURCES}
 )
 # Place it in the correct output dir
 set_target_properties (resources
   PROPERTIES
-  OUTPUT_NAME "${PROJECT_NAME}"
+  OUTPUT_NAME "resources"
   ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
   LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
   RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
@@ -92,53 +47,48 @@ set_target_properties (resources
 # Add it (and the CMakeRC dependency) to the targets
 list (APPEND TARGETS resources cmrc-base)
 
-#[===========================================================================[
-  Main target: NodeJs C++ Addon (requires building from 'npm run build')
-]===========================================================================]#
-if (-DBUILDING_NODE_EXTENSION IN_LIST CMAKE_CXX_FLAGS)
-  # Include Node-API headers
-  include (GetNodeAPIHeaders)
-  # Include Node-API wrappers
-  include (GetNodeAPIWrappers)
-  message (STATUS "Configuring noderc::noderc")
-  # Create a Node C++ Addon as a dynamic library
-  add_library (${PROJECT_NAME} SHARED)
-  add_library (${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
-  target_include_directories (${PROJECT_NAME}
-    PUBLIC
-      $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
-      $<INSTALL_INTERFACE:include>
-  )
-  target_include_directories (${PROJECT_NAME} PRIVATE ${CMAKE_JS_INC})
-  target_sources (${PROJECT_NAME} PRIVATE "src/${PROJECT_NAME}/${PROJECT_NAME}.cpp" ${CMAKE_JS_SRC})
-  target_link_libraries (${PROJECT_NAME} ${PROJECT_NAME}::resources ${CMAKE_JS_LIB})
-  set_target_properties (${PROJECT_NAME}
-    PROPERTIES
-    LIBRARY_OUTPUT_NAME "${PROJECT_NAME}"
-    PREFIX ""
-    SUFFIX ".node"
-    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-  )
-  if (MSVC AND CMAKE_JS_NODELIB_DEF AND CMAKE_JS_NODELIB_TARGET)
-    execute_process (COMMAND ${CMAKE_AR} /def:${CMAKE_JS_NODELIB_DEF} /out:${CMAKE_JS_NODELIB_TARGET} ${CMAKE_STATIC_LINKER_FLAGS})
-  endif ()
-  list (APPEND TARGETS ${PROJECT_NAME})
-endif ()
+
+
+include (CMakeJS)
+
+cmakejs_create_napi_addon (
+  noderc
+  "src/noderc/noderc.cpp"
+  NAMESPACE NodeRC
+  ALIAS NodeRC
+)
+
+target_link_libraries (noderc PRIVATE NodeRC::resources)
+
+list (APPEND TARGETS noderc)
 
 #[===========================================================================[
   Export this configuration to share it with other CMake projects
 ]===========================================================================]#
 
 # Collect and export targets
-set (${PROJECT_NAME}_TARGETS ${TARGETS} CACHE STRING "Targets to be built." FORCE)
+set (NodeRC_TARGETS ${TARGETS} CACHE STRING "Targets to be built." FORCE)
 
 export (
-  TARGETS ${${PROJECT_NAME}_TARGETS}
-  FILE ${PROJECT_BINARY_DIR}/share/cmake/${PROJECT_NAME}_targets.cmake
-  NAMESPACE ${PROJECT_NAME}::
+  TARGETS ${NodeRC_TARGETS}
+  FILE ${PROJECT_BINARY_DIR}/share/cmake/NodeRCTargets.cmake
+  NAMESPACE NodeRC::
 )
+
+install(
+  EXPORT NodeRCTargets
+  FILE NodeRCTargets.cmake
+  NAMESPACE NodeRC::
+  DESTINATION lib/cmake/NodeRC
+)
+
+install(TARGETS ${NodeRC_TARGETS}
+    EXPORT NodeRCTargets
+    LIBRARY DESTINATION  "${CMAKE_INSTALL_LIBDIR}"
+    ARCHIVE DESTINATION  "${CMAKE_INSTALL_LIBDIR}"
+    RUNTIME DESTINATION  "${CMAKE_INSTALL_BINDIR}"
+    INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+  )
 
 # get access to helper functions for creating config files
 include (CMakePackageConfigHelpers)
@@ -149,22 +99,45 @@ join_paths (includedir_for_pc_file "\${prefix}"      "${CMAKE_INSTALL_INCLUDEDIR
 
 # Create package config file
 configure_file (
-  ${PROJECT_SOURCE_DIR}/share/pkgconfig/${PROJECT_NAME}.pc.in
-  ${PROJECT_BINARY_DIR}/share/pkgconfig/${PROJECT_NAME}.pc
+  ${PROJECT_SOURCE_DIR}/share/pkgconfig/NodeRC.pc.in
+  ${PROJECT_BINARY_DIR}/share/pkgconfig/NodeRC.pc
   @ONLY
 )
 
 # create cmake config file
 configure_package_config_file (
-    ${PROJECT_SOURCE_DIR}/share/cmake/${PROJECT_NAME}_config.cmake.in
-    ${PROJECT_BINARY_DIR}/share/cmake/${PROJECT_NAME}_config.cmake
+    ${PROJECT_SOURCE_DIR}/share/cmake/NodeRCConfig.cmake.in
+    ${PROJECT_BINARY_DIR}/share/cmake/NodeRCConfig.cmake
   INSTALL_DESTINATION
-    ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+    ${CMAKE_INSTALL_LIBDIR}/cmake/NodeRC
 )
 
 # generate the version file for the cmake config file
 write_basic_package_version_file (
-	${PROJECT_BINARY_DIR}/share/cmake/${PROJECT_NAME}_config_version.cmake
-	VERSION ${PROJECT_VERSION}
+	${PROJECT_BINARY_DIR}/share/cmake/NodeRCConfigVersion.cmake
+	VERSION ${NodeRC_VERSION}
 	COMPATIBILITY AnyNewerVersion
 )
+
+# copy the addon types
+file(COPY
+  "${CMAKE_CURRENT_LIST_DIR}/lib/noderc.node.js"
+  "${CMAKE_CURRENT_LIST_DIR}/lib/noderc.node.ts"
+  "${CMAKE_CURRENT_LIST_DIR}/lib/noderc.node.d.ts"
+  DESTINATION
+  "${PROJECT_BINARY_DIR}/lib"
+)
+
+install(FILES
+  "${PROJECT_BINARY_DIR}/lib/noderc.node.js"
+  "${PROJECT_BINARY_DIR}/lib/noderc.node.ts"
+  "${PROJECT_BINARY_DIR}/lib/noderc.node.d.ts"
+  DESTINATION
+  "${CMAKE_INSTALL_LIBDIR}"
+)
+
+if(TRUE) # BUILD_TESTS
+  # include(CTest) # If you want to see all the test dashboard targets, uncomment this
+  enable_testing()
+  include("${CMAKE_CURRENT_LIST_DIR}/tests/noderc/tests.cmake")
+endif()

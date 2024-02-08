@@ -194,9 +194,11 @@ notes.txt
 foo.txt
 bar.txt
 
+.bak*
 package.lock
 yarn.lock
 
+include/noderc/version.hpp
 lib/noderc.json
 src/noderc/lib.cpp
 src/noderc/intermediate
