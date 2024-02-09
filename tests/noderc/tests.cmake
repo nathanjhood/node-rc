@@ -5,6 +5,8 @@ list(APPEND TESTS
   open
   is_file
   is_directory
+  exists
+  get_filesystem_object
 )
 
 # define a function to simplify adding tests
