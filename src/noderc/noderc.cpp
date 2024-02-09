@@ -1,7 +1,7 @@
 /**
  * @file addon.cpp
  * @author Nathan J. Hood (nathanjood@googlemail.com)
- * @brief Exports 'noderc' as a binary NodeJS addon.
+ * @brief Exports 'NodeRC' as a binary NodeJS addon.
  * @version 1.0.0
  * @date 2024-01-09
  *
@@ -32,9 +32,6 @@
 // Required header and C++ flag
 #if __has_include(<napi.h>) && BUILDING_NODE_EXTENSION
 
-// Get project version
-#include "noderc/version.hpp"
-
 // Get standard library dependencies
 #include <algorithm>
 #include <filesystem>
@@ -50,22 +47,27 @@
 #include <cmrc/cmrc.hpp>
 
 // Register our resource library namespace
-CMRC_DECLARE(noderc::resources);
+CMRC_DECLARE(NodeRC::resources);
+
+#ifndef STRINGIFY
+# define STRINGIFY_HELPER(n) #n
+# define STRINGIFY(n) STRINGIFY_HELPER(n)
+#endif
 
 /**
- * @brief The ```noderc``` namespace.
+ * @brief The ```NodeRC``` namespace.
  *
  */
-namespace noderc
+namespace NodeRC
 {
 
-/** @addtogroup noderc
+/** @addtogroup NodeRC
  *  @{
  */
 
 
 /**
- * @brief The ```noderc::binding``` namespace.
+ * @brief The ```NodeRC::binding``` namespace.
  *
  * These functions consume parts of both the ```Napi``` and ```CMakeRC```
  * namespaces, but are not exported as Javascript functions.
@@ -129,7 +131,7 @@ bool iterate_filesystem(const Napi::Env& env, const cmrc::embedded_filesystem& f
 
     } else if(entry.is_directory())  {
 
-      b = noderc::binding::iterate_filesystem(env, fs, p, obj);
+      b = NodeRC::binding::iterate_filesystem(env, fs, p, obj);
       p.clear();
 
     } else { return false; }
@@ -141,18 +143,25 @@ bool iterate_filesystem(const Napi::Env& env, const cmrc::embedded_filesystem& f
   /// @} group binding
 } // namespace binding
 
+  /// @} group NodeRC
+} // namespace NodeRC
 
+
+namespace Napi {
+
+#ifdef    NAPI_CPP_CUSTOM_NAMESPACE
 /**
- * @brief The ```noderc::addon``` namespace.
+ * @brief The ```Napi::addon``` namespace.
  *
  * The functions contained in this namespace are exported as Javascript
  * functions, and are generally not intended to be called in other C++ code.
  *
- * @see ```noderc::addon::Init(Napi::Env env, Napi::Object exports)```
+ * @see ```Napi::addon::Init(Napi::Env env, Napi::Object exports)```
  *
  */
-namespace addon
+namespace NAPI_CPP_CUSTOM_NAMESPACE
 {
+#endif
 /** @addtogroup addon
  *  @{
  */
@@ -165,7 +174,7 @@ namespace addon
  */
 Napi::Value Hello(const Napi::CallbackInfo& info)
 {
-  return Napi::String::New(info.Env(), "noderc is online!");
+  return Napi::String::New(info.Env(), STRINGIFY(CMAKEJS_ADDON_NAME)".node is online!");
 }
 
 /**
@@ -176,7 +185,7 @@ Napi::Value Hello(const Napi::CallbackInfo& info)
  */
 Napi::Value Version(const Napi::CallbackInfo& info)
 {
-  return Napi::String::New(info.Env(), NODERC_VERSION);
+  return Napi::Number::New(info.Env(), NAPI_VERSION);
 }
 
 /**
@@ -208,7 +217,7 @@ Napi::Value Open(const Napi::CallbackInfo& args)
 
   Napi::String out;
 
-  auto fs = cmrc::noderc::resources::get_filesystem();
+  auto fs = cmrc::NodeRC::resources::get_filesystem();
 
   try {
 
@@ -271,7 +280,7 @@ Napi::Value IsFile(const Napi::CallbackInfo& args)
     return env.Null();
   }
 
-  auto fs = cmrc::noderc::resources::get_filesystem();
+  auto fs = cmrc::NodeRC::resources::get_filesystem();
 
   return Napi::Boolean::New(env, fs.is_file(args[0].ToString().Utf8Value()));
 }
@@ -300,7 +309,7 @@ Napi::Value IsDirectory(const Napi::CallbackInfo& args)
     return env.Null();
   }
 
-  auto fs = cmrc::noderc::resources::get_filesystem();
+  auto fs = cmrc::NodeRC::resources::get_filesystem();
 
   return Napi::Boolean::New(env, fs.is_directory(args[0].ToString().Utf8Value()));
 }
@@ -329,7 +338,7 @@ Napi::Value Exists(const Napi::CallbackInfo& args)
     return env.Null();
   }
 
-  auto fs = cmrc::noderc::resources::get_filesystem();
+  auto fs = cmrc::NodeRC::resources::get_filesystem();
 
   return Napi::Boolean::New(env, fs.exists(args[0].ToString().Utf8Value()));
 }
@@ -365,7 +374,7 @@ Napi::Value Compare(const Napi::CallbackInfo& args)
 
   using iter         = std::istreambuf_iterator<char>;
   const auto fs_size = std::distance(iter(arg0_fs), iter());
-  auto       fs      = cmrc::noderc::resources::get_filesystem();
+  auto       fs      = cmrc::NodeRC::resources::get_filesystem();
 
   arg0_fs.seekg(0);
 
@@ -443,7 +452,7 @@ Napi::Value CompareSize(const Napi::CallbackInfo& args)
 
   using iter         = std::istreambuf_iterator<char>;
   const auto fs_size = std::distance(iter(arg0_fs), iter());
-  auto       fs      = cmrc::noderc::resources::get_filesystem();
+  auto       fs      = cmrc::NodeRC::resources::get_filesystem();
 
   arg0_fs.seekg(0);
 
@@ -514,7 +523,7 @@ Napi::Value CompareContent(const Napi::CallbackInfo& args)
   }
 
   using iter         = std::istreambuf_iterator<char>;
-  auto       fs      = cmrc::noderc::resources::get_filesystem();
+  auto       fs      = cmrc::NodeRC::resources::get_filesystem();
 
   arg0_fs.seekg(0);
 
@@ -567,13 +576,13 @@ Napi::Value GetFileSystemObject(const Napi::CallbackInfo& args)
 
   using bytes = std::vector<char>;
 
-  auto fs = cmrc::noderc::resources::get_filesystem();
+  auto fs = cmrc::NodeRC::resources::get_filesystem();
   auto obj = Napi::Object::New(env);
   const char root[1] = "";
 
   try {
 
-    auto a = noderc::binding::iterate_filesystem(env, fs, root, obj);
+    auto a = ::NodeRC::binding::iterate_filesystem(env, fs, root, obj);
 
   } catch (const std::system_error& e) {
 
@@ -666,18 +675,28 @@ Napi::Object Init(Napi::Env env, Napi::Object exports)
 }
 
 // Register a new addon with the intializer function defined above
-NODE_API_MODULE(noderc, Init) // (name to use, initializer to use)
+NODE_API_MODULE(CMAKEJS_ADDON_NAME, Init) // (name to use, initializer to use)
 
 // The above attaches the functions exported in 'Init()' to the name used in the fist argument.
 // The C++ functions are then obtainable on the Javascript side under e.g. 'noderc.hello()'
 
-  /// @} group addon
-} // namespace addon
+
+
+#ifdef NAPI_CPP_CUSTOM_NAMESPACE
+  /// @} group NAPI_CPP_CUSTOM_NAMESPACE
+}  // namespace NAPI_CPP_CUSTOM_NAMESPACE
+#endif
 
 // Here, we can extend the namepsace with Napi overloads, if we need them.
 
-  /// @} group noderc
-} // namespace noderc
+} // namespace Napi
+
+// Export your custom namespace to outside of the Napi namespace, providing an
+// alias to the Napi Addon API; e.g., '<vendor>::<addon>::Object()', along with the
+// functions defined above, such as '<vendor>::<addon>::Hello()'.
+namespace NAPI_CPP_CUSTOM_NAMESPACE::CMAKEJS_ADDON_NAME {
+  using namespace Napi::NAPI_CPP_CUSTOM_NAMESPACE;
+}
 
 #else
  #warning "Warning: Cannot find '<napi.h>'"

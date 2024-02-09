@@ -8,10 +8,10 @@ interface noderc {
    */
   hello(): string;
   /**
-   * Returns a string, confirming the module version number.
-   * @returns string
+   * Returns a number, confirming the Napi module version number.
+   * @returns number
    */
-  version(): string;
+  version(): number;
 
   /**
    * Opens and returns a non-directory file object at ```path```, or throws
