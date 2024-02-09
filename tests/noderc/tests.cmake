@@ -2,6 +2,9 @@
 list(APPEND TESTS
   hello
   version
+  open
+  is_file
+  is_directory
 )
 
 # define a function to simplify adding tests
